@@ -1,6 +1,7 @@
 using Bikiran.Payment.Bkash.Configuration;
 using Bikiran.Payment.Bkash.Exceptions;
 using Bikiran.Payment.Bkash.Services;
+using Bikiran.Payment.Bkash.HealthChecks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -68,25 +69,42 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
+    /// <summary>
+    /// Adds bKash health check to the health check builder
+    /// </summary>
+    /// <param name="builder">Health check builder</param>
+    /// <param name="name">Name of the health check (default: bkash)</param>
+    /// <param name="tags">Tags for the health check</param>
+    /// <returns>Health check builder for chaining</returns>
+    public static IHealthChecksBuilder AddBkashHealthCheck(
+        this IHealthChecksBuilder builder,
+        string name = "bkash",
+        params string[] tags)
+    {
+        return builder.AddCheck<BkashHealthCheck>(name, tags: tags);
+    }
+
     private static void RegisterServices(IServiceCollection services)
     {
         // Register HttpClient for bKash API calls
-        services.AddHttpClient<IBkashTokenService, BkashTokenService>((serviceProvider, client) =>
+        services.AddHttpClient<BkashTokenService>((serviceProvider, client) =>
         {
             var options = serviceProvider.GetRequiredService<Microsoft.Extensions.Options.IOptions<BkashOptions>>();
             client.BaseAddress = new Uri(options.Value.GetBaseUrl());
             client.Timeout = TimeSpan.FromSeconds(options.Value.TimeoutSeconds);
         });
 
-        services.AddHttpClient<IBkashPaymentService, BkashPaymentService>((serviceProvider, client) =>
+        services.AddHttpClient<BkashPaymentService>((serviceProvider, client) =>
         {
             var options = serviceProvider.GetRequiredService<Microsoft.Extensions.Options.IOptions<BkashOptions>>();
             client.BaseAddress = new Uri(options.Value.GetBaseUrl());
             client.Timeout = TimeSpan.FromSeconds(options.Value.TimeoutSeconds);
         });
 
-        // Register services as scoped (can be changed to singleton if needed)
-        services.AddScoped<IBkashTokenService, BkashTokenService>();
+        // Register token service as singleton to maintain token cache across requests
+        services.AddSingleton<IBkashTokenService, BkashTokenService>();
+        
+        // Register payment service as scoped
         services.AddScoped<IBkashPaymentService, BkashPaymentService>();
     }
 }

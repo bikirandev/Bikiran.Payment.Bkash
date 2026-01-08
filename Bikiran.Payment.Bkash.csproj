@@ -16,20 +16,26 @@
 		<RepositoryUrl>https://github.com/bikiran/bkash-dotnet</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<Copyright>Copyright © 2026 Bikiran</Copyright>
+		<Copyright>Copyright © 2025 Bikiran</Copyright>
 		<PackageReleaseNotes>
 			Initial release with support for:
 			- Automatic token management (grant/refresh)
 			- Payment creation and execution
 			- Payment status query
-			- Refund processing
+			- Refund processing with status tracking
 			- Multi-environment support (sandbox/production)
-			- Comprehensive error handling
+			- Comprehensive error handling with specific exception types
+			- Health check integration for monitoring
+			- Webhook signature verification
+			- Strongly-typed request/response models
+			- Built-in validation for all requests
+			- Singleton token service for efficient token caching
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />

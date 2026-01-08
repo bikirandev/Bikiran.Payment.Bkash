@@ -133,8 +133,7 @@ public class BkashTokenService : IBkashTokenService
     /// <inheritdoc/>
     public async Task<BkashAuthResponse> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(refreshToken))
-            throw new ArgumentException("Refresh token cannot be null or empty", nameof(refreshToken));
+        ArgumentException.ThrowIfNullOrWhiteSpace(refreshToken);
 
         var url = $"{_options.GetBaseUrl()}/v1.2.0-beta/tokenized/checkout/token/refresh";
 

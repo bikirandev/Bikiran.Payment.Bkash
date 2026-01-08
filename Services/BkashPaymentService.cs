@@ -36,8 +36,7 @@ public class BkashPaymentService : IBkashPaymentService
         BkashCreatePaymentRequest request,
         CancellationToken cancellationToken = default)
     {
-        if (request == null)
-            throw new ArgumentNullException(nameof(request));
+        ArgumentNullException.ThrowIfNull(request);
 
         request.Validate();
 
@@ -88,8 +87,7 @@ public class BkashPaymentService : IBkashPaymentService
         string paymentId,
         CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(paymentId))
-            throw new ArgumentException("Payment ID cannot be null or empty", nameof(paymentId));
+        ArgumentException.ThrowIfNullOrWhiteSpace(paymentId);
 
         var token = await _tokenService.GetValidTokenAsync(cancellationToken);
         var url = $"{_options.GetBaseUrl()}/v1.2.0-beta/tokenized/checkout/execute";
@@ -150,8 +148,7 @@ public class BkashPaymentService : IBkashPaymentService
         string paymentId,
         CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(paymentId))
-            throw new ArgumentException("Payment ID cannot be null or empty", nameof(paymentId));
+        ArgumentException.ThrowIfNullOrWhiteSpace(paymentId);
 
         var token = await _tokenService.GetValidTokenAsync(cancellationToken);
         var url = $"{_options.GetBaseUrl()}/v1.2.0-beta/tokenized/checkout/payment/status";
@@ -185,8 +182,7 @@ public class BkashPaymentService : IBkashPaymentService
         BkashRefundPaymentRequest request,
         CancellationToken cancellationToken = default)
     {
-        if (request == null)
-            throw new ArgumentNullException(nameof(request));
+        ArgumentNullException.ThrowIfNull(request);
 
         request.Validate();
 
@@ -230,11 +226,8 @@ public class BkashPaymentService : IBkashPaymentService
         string trxId,
         CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(paymentId))
-            throw new ArgumentException("Payment ID cannot be null or empty", nameof(paymentId));
-
-        if (string.IsNullOrWhiteSpace(trxId))
-            throw new ArgumentException("Transaction ID cannot be null or empty", nameof(trxId));
+        ArgumentException.ThrowIfNullOrWhiteSpace(paymentId);
+        ArgumentException.ThrowIfNullOrWhiteSpace(trxId);
 
         var token = await _tokenService.GetValidTokenAsync(cancellationToken);
         var url = $"{_options.GetBaseUrl()}/v2/tokenized-checkout/refund/payment/status";

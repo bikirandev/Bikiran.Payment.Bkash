@@ -12,6 +12,8 @@ A comprehensive .NET library for integrating bKash payment gateway with automati
 - ✅ Built-in error handling and logging
 - ✅ Strongly-typed request/response models
 - ✅ Dependency injection support
+- ✅ Health check integration
+- ✅ Webhook signature verification
 
 ## Installation
 
@@ -34,7 +36,14 @@ services.AddBkashPayment(options =>
 });
 ```
 
-### 2. Use in Your Code
+### 2. Add Health Checks (Optional)
+
+```csharp
+services.AddHealthChecks()
+    .AddBkashHealthCheck("bkash", "payment", "external");
+```
+
+### 3. Use in Your Code
 
 ```csharp
 public class PaymentService
@@ -78,7 +87,9 @@ public class PaymentService
     "AppSecret": "your-app-secret",
     "Username": "your-username",
     "Password": "your-password",
-    "Environment": "Sandbox"
+    "Environment": "Sandbox",
+    "TimeoutSeconds": 30,
+    "TokenRefreshBufferSeconds": 300
   }
 }
 ```
@@ -108,6 +119,29 @@ BKASH_PASSWORD=your-password
 - `GrantTokenAsync()` - Request a new token
 - `RefreshTokenAsync(string refreshToken)` - Refresh an existing token
 
+## Webhook Verification
+
+Verify webhook signatures to ensure authenticity:
+
+```csharp
+using Bikiran.Payment.Bkash.Utilities;
+
+public IActionResult ReceiveWebhook([FromBody] string payload, [FromHeader(Name = "X-Signature")] string signature)
+{
+    var appSecret = Configuration["Bkash:AppSecret"];
+    
+    if (!BkashWebhookHelper.VerifyWebhookSignature(payload, signature, appSecret))
+    {
+        return Unauthorized("Invalid signature");
+    }
+    
+    var notification = JsonConvert.DeserializeObject<BkashWebhookNotification>(payload);
+    // Process webhook...
+    
+    return Ok();
+}
+```
+
 ## Payment Modes
 
 - `0001` - Checkout (one-time payment)
@@ -123,12 +157,52 @@ try
 {
     var response = await _bkashService.CreatePaymentAsync(request);
 }
+catch (BkashAuthenticationException ex)
+{
+    // Handle authentication errors
+    Console.WriteLine($"Auth Error: {ex.Message}");
+}
+catch (BkashPaymentException ex)
+{
+    // Handle payment-specific errors
+    Console.WriteLine($"Payment Error: {ex.ErrorCode} - {ex.Message}");
+}
 catch (BkashException ex)
 {
-    // Handle bKash-specific errors
+    // Handle general bKash errors
     Console.WriteLine($"Error Code: {ex.ErrorCode}");
     Console.WriteLine($"Message: {ex.Message}");
 }
+```
+
+## Advanced Configuration
+
+### Custom Timeout and Token Refresh
+
+```csharp
+services.AddBkashPayment(options =>
+{
+    options.AppKey = "your-app-key";
+    options.AppSecret = "your-app-secret";
+    options.Username = "your-username";
+    options.Password = "your-password";
+    options.Environment = BkashEnvironment.Production;
+    options.TimeoutSeconds = 60; // Custom timeout
+    options.TokenRefreshBufferSeconds = 600; // Refresh 10 minutes before expiry
+});
+```
+
+### Custom Base URL
+
+```csharp
+services.AddBkashPayment(options =>
+{
+    options.AppKey = "your-app-key";
+    options.AppSecret = "your-app-secret";
+    options.Username = "your-username";
+    options.Password = "your-password";
+    options.BaseUrl = "https://custom-bkash-api.example.com";
+});
 ```
 
 ## License
