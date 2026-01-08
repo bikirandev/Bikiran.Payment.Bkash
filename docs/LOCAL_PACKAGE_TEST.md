@@ -18,15 +18,29 @@ cd BkashTestApp
 ### Step 2: Add Local Package Source
 
 ```powershell
-# Add the local package source
+# First, check if LocalBkash source already exists
+dotnet nuget list source
+
+# If LocalBkash exists, remove it first
+dotnet nuget remove source LocalBkash
+
+# Add the local package source with absolute path
 dotnet nuget add source "D:\P_Bikiran_Packages\Bikiran.Payment.Bkash\bin\Release" -n LocalBkash
+
+# Verify the source was added correctly
+dotnet nuget list source
 ```
+
+**Important**: The package source path must be an absolute path and must exist before adding the package.
 
 ### Step 3: Add the Package
 
 ```powershell
-# Add the package
+# Add the package using the source name
 dotnet add package Bikiran.Payment.Bkash --version 1.0.0 --source LocalBkash
+
+# Alternative: Specify all sources (recommended if you have other dependencies)
+dotnet add package Bikiran.Payment.Bkash --version 1.0.0
 ```
 
 ### Step 4: Create Test Code
@@ -266,11 +280,71 @@ After running the tests, verify:
 
 ## Troubleshooting
 
-### Issue: Package not found
+### Issue: Package not found or NU1301 error
 
-**Solution**: Make sure the local source is added correctly:
+**Error**: `error: NU1301: The local source 'D:\...\LocalBkash' doesn't exist.`
+
+**Cause**: The package source path is being resolved relative to the project directory instead of using the absolute path.
+
+**Solution 1 - Remove and Re-add Source Globally**:
 ```powershell
+# Remove the problematic source
+dotnet nuget remove source LocalBkash
+
+# Add it back with absolute path
+dotnet nuget add source "D:\P_Bikiran_Packages\Bikiran.Payment.Bkash\bin\Release" -n LocalBkash
+
+# Verify it was added correctly
 dotnet nuget list source
+
+# Try adding the package again
+dotnet add package Bikiran.Payment.Bkash --version 1.0.0
+```
+
+**Solution 2 - Use nuget.config in Project Directory**:
+```powershell
+# Create a nuget.config in your test project directory
+@"
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+    <add key="LocalBkash" value="D:\P_Bikiran_Packages\Bikiran.Payment.Bkash\bin\Release" />
+  </packageSources>
+</configuration>
+"@ | Out-File -FilePath nuget.config -Encoding utf8
+
+# Now add the package
+dotnet add package Bikiran.Payment.Bkash --version 1.0.0
+```
+
+**Solution 3 - Direct Package Reference**:
+```powershell
+# Edit the .csproj file directly and add:
+```xml
+<ItemGroup>
+  <PackageReference Include="Bikiran.Payment.Bkash" Version="1.0.0">
+    <IncludeAssets>all</IncludeAssets>
+  </PackageReference>
+</ItemGroup>
+```
+
+# Then restore with explicit source
+dotnet restore --source "D:\P_Bikiran_Packages\Bikiran.Payment.Bkash\bin\Release" --source https://api.nuget.org/v3/index.json
+```
+
+**Solution 4 - Use Local Folder Path Directly**:
+```powershell
+# Install directly from the .nupkg file
+dotnet add package Bikiran.Payment.Bkash --version 1.0.0 --source "D:\P_Bikiran_Packages\Bikiran.Payment.Bkash\bin\Release"
+```
+
+### Issue: Source name already exists
+
+**Solution**: Remove the existing source first:
+```powershell
+dotnet nuget remove source LocalBkash
+dotnet nuget add source "D:\P_Bikiran_Packages\Bikiran.Payment.Bkash\bin\Release" -n LocalBkash
 ```
 
 ### Issue: Missing dependencies
@@ -278,7 +352,7 @@ dotnet nuget list source
 **Solution**: Clear NuGet cache and restore:
 ```powershell
 dotnet nuget locals all --clear
-dotnet restore
+dotnet restore --source LocalBkash --source https://api.nuget.org/v3/index.json
 ```
 
 ### Issue: Authentication fails
@@ -318,4 +392,3 @@ And remove the local package source if needed:
 
 ```powershell
 dotnet nuget remove source LocalBkash
-```

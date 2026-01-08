@@ -4,6 +4,7 @@ This document provides comprehensive examples of using the Bikiran.Payment.Bkash
 
 ## Table of Contents
 - [Basic Setup](#basic-setup)
+- [Installation](#installation)
 - [Environment Variables Configuration](#environment-variables-configuration)
 - [Payment Flow](#payment-flow)
 - [Refund Operations](#refund-operations)
@@ -11,6 +12,52 @@ This document provides comprehensive examples of using the Bikiran.Payment.Bkash
 - [Health Monitoring](#health-monitoring)
 - [Error Handling](#error-handling)
 - [Advanced Configuration](#advanced-configuration)
+
+---
+
+## Installation
+
+### From NuGet.org (Recommended)
+
+```powershell
+dotnet add package Bikiran.Payment.Bkash
+```
+
+### From Local Package Source (For Testing)
+
+```powershell
+# Add local source
+dotnet nuget add source "D:\Path\To\Package\bin\Release" -n LocalBkash
+
+# Install package
+dotnet add package Bikiran.Payment.Bkash --version 1.0.0 --source LocalBkash
+```
+
+**Troubleshooting Local Installation**:
+
+If you encounter `NU1301: The local source doesn't exist` error:
+
+```powershell
+# Solution 1: Remove and re-add source
+dotnet nuget remove source LocalBkash
+dotnet nuget add source "D:\Path\To\Package\bin\Release" -n LocalBkash
+
+# Solution 2: Create local nuget.config
+@"
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+    <add key="LocalBkash" value="D:\Path\To\Package\bin\Release" />
+  </packageSources>
+</configuration>
+"@ | Out-File -FilePath nuget.config -Encoding utf8
+
+# Then restore
+dotnet restore
+```
+
+See [LOCAL_PACKAGE_TEST.md](LOCAL_PACKAGE_TEST.md) for detailed local testing guide.
 
 ---
 
@@ -258,6 +305,66 @@ spec:
 3. Rotate credentials regularly
 4. Use different credentials for each environment
 5. Limit access to production credentials
+
+---
+
+## Basic Setup
+
+### Configure in Program.cs (Minimal API)
+
+```csharp
+using Bikiran.Payment.Bkash;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add bKash payment services
+builder.Services.AddBkashPayment(builder.Configuration);
+
+// Optional: Add health checks
+builder.Services.AddHealthChecks()
+    .AddBkashHealthCheck("bkash", "payment", "external");
+
+var app = builder.Build();
+
+// Map health check endpoint
+app.MapHealthChecks("/health");
+
+app.Run();
+```
+
+### Configure in Program.cs (MVC/API)
+
+```csharp
+using Bikiran.Payment.Bkash;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+builder.Services.AddBkashPayment(builder.Configuration);
+builder.Services.AddHealthChecks().AddBkashHealthCheck("bkash");
+
+var app = builder.Build();
+
+app.MapControllers();
+app.MapHealthChecks("/health");
+app.Run();
+```
+
+### appsettings.json
+
+```json
+{
+  "Bkash": {
+    "AppKey": "4f6o0cjiki2rfm34kfdadl1eqq",
+    "AppSecret": "2is7hdktrekvrbljjh44ll3d9l1dtjo4pasmjvs5vl5qr3fug4b",
+    "Username": "sandboxTokenizedUser02",
+    "Password": "sandboxTokenizedUser02@12345",
+    "Environment": "Sandbox",
+    "TimeoutSeconds": 30,
+    "TokenRefreshBufferSeconds": 300
+  }
+}
+```
 
 ---
 
