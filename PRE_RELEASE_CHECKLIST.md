@@ -45,6 +45,13 @@
 - [x] Package tags appropriate
 - [x] NuGet dependencies up-to-date
 
+## Build & Package
+- [x] Release build successful
+- [x] NuGet package created (Bikiran.Payment.Bkash.1.0.0.nupkg)
+- [x] Package size reasonable (26 KB)
+- [ ] Package tested locally (TODO)
+- [ ] Package ready for NuGet.org
+
 ## Security
 - [x] Webhook signature verification implemented
 - [x] Replay attack prevention (timestamp validation)
@@ -85,10 +92,10 @@
 - [ ] Rollback plan
 
 ## Release Process
-- [ ] Update version number
-- [ ] Update CHANGELOG.md (create if needed)
+- [ ] Update version number (currently 1.0.0)
+- [x] Update CHANGELOG.md ?
 - [ ] Tag release in Git
-- [ ] Build NuGet package
+- [x] Build NuGet package ?
 - [ ] Test NuGet package locally
 - [ ] Publish to NuGet.org
 - [ ] Create GitHub release
@@ -135,27 +142,45 @@
 
 ### Build
 ```bash
-dotnet build
+dotnet build --configuration Release
 ```
 
 ### Pack
 ```bash
-dotnet pack -c Release
+dotnet pack --configuration Release --no-build
 ```
 
-### Local Test
+### Test Package Locally
 ```bash
-dotnet nuget add source ./bin/Release -n LocalTest
-dotnet add package Bikiran.Payment.Bkash --source LocalTest
+# Create a test project
+dotnet new console -n BkashTest
+cd BkashTest
+
+# Add local package source
+dotnet nuget add source D:\P_Bikiran_Packages\Bikiran.Payment.Bkash\bin\Release -n LocalBkash
+
+# Add package
+dotnet add package Bikiran.Payment.Bkash --version 1.0.0 --source LocalBkash
 ```
 
 ### Publish to NuGet
 ```bash
-dotnet nuget push bin/Release/Bikiran.Payment.Bkash.1.0.0.nupkg --api-key YOUR_API_KEY --source https://api.nuget.org/v3/index.json
+dotnet nuget push bin\Release\Bikiran.Payment.Bkash.1.0.0.nupkg --api-key YOUR_API_KEY --source https://api.nuget.org/v3/index.json
 ```
 
 ---
 
+## Package Information
+- **Package Name**: Bikiran.Payment.Bkash
+- **Version**: 1.0.0
+- **Package File**: Bikiran.Payment.Bkash.1.0.0.nupkg
+- **Package Size**: 26 KB
+- **Location**: D:\P_Bikiran_Packages\Bikiran.Payment.Bkash\bin\Release\
+- **Build Date**: 2026-01-08
+
+---
+
 **Last Updated**: 2025
-**Reviewed By**: [Your Name]
-**Status**: Ready for testing
+**Build Status**: ? Success
+**Package Status**: ? Created
+**Ready for**: Local testing

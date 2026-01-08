@@ -96,12 +96,36 @@ public class PaymentService
 
 ### Environment Variables
 
+You can also configure using environment variables:
+
+```env
+BKASH__APPKEY=your-app-key
+BKASH__APPSECRET=your-app-secret
+BKASH__USERNAME=your-username
+BKASH__PASSWORD=your-password
+BKASH__ENVIRONMENT=Sandbox
 ```
-BKASH_APP_KEY=your-app-key
-BKASH_APP_SECRET=your-app-secret
-BKASH_USERNAME=your-username
-BKASH_PASSWORD=your-password
-```
+
+📚 **See detailed configuration guides:**
+- [ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.md) - Complete environment configuration guide
+- [QUICK_REFERENCE.md](QUICK_REFERENCE.md) - Quick reference card
+- `.env.example` - Environment variable template
+
+### Using .env Files (Recommended for Development)
+
+1. Copy `.env.example` to `.env`
+2. Update with your credentials
+3. Install DotNetEnv package:
+   ```bash
+   dotnet add package DotNetEnv
+   ```
+4. Load in Program.cs:
+   ```csharp
+   using DotNetEnv;
+   Env.Load();
+   ```
+
+⚠️ **Security Note**: Never commit `.env` files with actual credentials to source control!
 
 ## API Reference
 

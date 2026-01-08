@@ -4,6 +4,7 @@ This document provides comprehensive examples of using the Bikiran.Payment.Bkash
 
 ## Table of Contents
 - [Basic Setup](#basic-setup)
+- [Environment Variables Configuration](#environment-variables-configuration)
 - [Payment Flow](#payment-flow)
 - [Refund Operations](#refund-operations)
 - [Webhook Handling](#webhook-handling)
@@ -70,6 +71,193 @@ app.Run();
   }
 }
 ```
+
+---
+
+## Environment Variables Configuration
+
+### Using .env Files (Recommended for Local Development)
+
+**Step 1: Install DotNetEnv Package** (Optional but Recommended)
+
+```bash
+dotnet add package DotNetEnv
+```
+
+**Step 2: Create `.env` file in your project root**
+
+```env
+# Copy from .env.example provided in the package
+BKASH__APPKEY=4f6o0cjiki2rfm34kfdadl1eqq
+BKASH__APPSECRET=2is7hdktrekvrbljjh44ll3d9l1dtjo4pasmjvs5vl5qr3fug4b
+BKASH__USERNAME=sandboxTokenizedUser02
+BKASH__PASSWORD=sandboxTokenizedUser02@12345
+BKASH__ENVIRONMENT=Sandbox
+BKASH__TIMEOUTSECONDS=30
+BKASH__TOKENREFRESHBUFFERSECONDS=300
+```
+
+**Step 3: Load .env in Program.cs**
+
+```csharp
+using DotNetEnv;
+using Bikiran.Payment.Bkash;
+
+// Load .env file at startup
+Env.Load();
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Environment variables are automatically loaded into configuration
+builder.Services.AddBkashPayment(builder.Configuration);
+
+var app = builder.Build();
+app.Run();
+```
+
+### Without DotNetEnv Package
+
+You can also set environment variables directly in your system or use launchSettings.json:
+
+**launchSettings.json**
+```json
+{
+  "profiles": {
+    "Development": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "BKASH__APPKEY": "4f6o0cjiki2rfm34kfdadl1eqq",
+        "BKASH__APPSECRET": "2is7hdktrekvrbljjh44ll3d9l1dtjo4pasmjvs5vl5qr3fug4b",
+        "BKASH__USERNAME": "sandboxTokenizedUser02",
+        "BKASH__PASSWORD": "sandboxTokenizedUser02@12345",
+        "BKASH__ENVIRONMENT": "Sandbox"
+      }
+    }
+  }
+}
+```
+
+### Docker Environment Variables
+
+**docker-compose.yml**
+```yaml
+version: '3.8'
+services:
+  api:
+    image: your-api-image
+    environment:
+      - BKASH__APPKEY=${BKASH_APPKEY}
+      - BKASH__APPSECRET=${BKASH_APPSECRET}
+      - BKASH__USERNAME=${BKASH_USERNAME}
+      - BKASH__PASSWORD=${BKASH_PASSWORD}
+      - BKASH__ENVIRONMENT=Production
+    env_file:
+      - .env.production
+```
+
+### Azure App Service Configuration
+
+For Azure deployments, set environment variables in App Service Configuration:
+
+```bash
+# Using Azure CLI
+az webapp config appsettings set \
+  --name your-app-name \
+  --resource-group your-resource-group \
+  --settings \
+    BKASH__APPKEY="your-app-key" \
+    BKASH__APPSECRET="your-app-secret" \
+    BKASH__USERNAME="your-username" \
+    BKASH__PASSWORD="your-password" \
+    BKASH__ENVIRONMENT="Production"
+```
+
+### AWS Elastic Beanstalk Configuration
+
+**In .ebextensions/environment.config**
+```yaml
+option_settings:
+  aws:elasticbeanstalk:application:environment:
+    BKASH__APPKEY: "your-app-key"
+    BKASH__APPSECRET: "your-app-secret"
+    BKASH__USERNAME: "your-username"
+    BKASH__PASSWORD: "your-password"
+    BKASH__ENVIRONMENT: "Production"
+```
+
+### Kubernetes Secrets
+
+**Create Secret**
+```bash
+kubectl create secret generic bkash-credentials \
+  --from-literal=appkey='your-app-key' \
+  --from-literal=appsecret='your-app-secret' \
+  --from-literal=username='your-username' \
+  --from-literal=password='your-password'
+```
+
+**Use in Deployment**
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: your-api
+spec:
+  template:
+    spec:
+      containers:
+      - name: api
+        image: your-api-image
+        env:
+        - name: BKASH__APPKEY
+          valueFrom:
+            secretKeyRef:
+              name: bkash-credentials
+              key: appkey
+        - name: BKASH__APPSECRET
+          valueFrom:
+            secretKeyRef:
+              name: bkash-credentials
+              key: appsecret
+        - name: BKASH__USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: bkash-credentials
+              key: username
+        - name: BKASH__PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: bkash-credentials
+              key: password
+        - name: BKASH__ENVIRONMENT
+          value: "Production"
+```
+
+### Important Security Notes
+
+?? **DO NOT** commit `.env` files with actual credentials to source control!
+
+**Add to .gitignore:**
+```gitignore
+# Environment files with credentials
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Keep example files
+!.env.example
+!.env.sandbox
+!.env.production.template
+```
+
+**Recommended practices:**
+1. Use `.env.example` or `.env.template` files for documentation
+2. Use Azure Key Vault, AWS Secrets Manager, or HashiCorp Vault in production
+3. Rotate credentials regularly
+4. Use different credentials for each environment
+5. Limit access to production credentials
 
 ---
 
