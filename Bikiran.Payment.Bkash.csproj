@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Version>1.0.0</Version>
+		<Authors>Bikiran</Authors>
+		<Company>Bikiran</Company>
+		<Product>Bikiran bKash Payment Gateway</Product>
+		<Description>A comprehensive .NET library for integrating bKash payment gateway with automatic token management, payment processing, and refund capabilities. Supports Tokenized Checkout API v1.2.0-beta.</Description>
+		<PackageTags>bKash;Payment;Gateway;Bangladesh;Mobile Financial Service;MFS;Payment Processing;Tokenized Checkout</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/bikiran/bkash-dotnet</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/bikiran/bkash-dotnet</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<Copyright>Copyright © 2026 Bikiran</Copyright>
+		<PackageReleaseNotes>
+			Initial release with support for:
+			- Automatic token management (grant/refresh)
+			- Payment creation and execution
+			- Payment status query
+			- Refund processing
+			- Multi-environment support (sandbox/production)
+			- Comprehensive error handling
+		</PackageReleaseNotes>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+</Project>
