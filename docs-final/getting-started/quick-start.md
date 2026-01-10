@@ -95,7 +95,7 @@ public class PaymentController : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreatePayment([FromBody] decimal amount)
+    public async Task<IActionResult> CreatePayment([FromBody] double amount)
     {
         var request = new BkashCreatePaymentRequest
         {

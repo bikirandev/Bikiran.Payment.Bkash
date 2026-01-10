@@ -86,7 +86,7 @@ public class PaymentService
         _bkashService = bkashService;
     }
 
-    public async Task<string> CreatePaymentAsync(decimal amount, string invoiceNumber, string customerPhone)
+    public async Task<string> CreatePaymentAsync(double amount, string invoiceNumber, string customerPhone)
     {
         var request = new BkashCreatePaymentRequest
         {

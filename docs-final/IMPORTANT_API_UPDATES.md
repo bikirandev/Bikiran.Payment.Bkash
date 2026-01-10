@@ -15,7 +15,7 @@ This document highlights critical changes made to align with the official bKash 
 ```csharp
 public class BkashCreatePaymentRequest
 {
-    public decimal Amount { get; set; }
+    public double Amount { get; set; }
     public string Intent { get; set; }
     public string MerchantInvoiceNumber { get; set; }
     public string PayerReference { get; set; }           // ✅ ADDED - Required field

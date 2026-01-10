@@ -333,7 +333,7 @@ public class BkashCreatePaymentRequest
 {
     [Required]
     [Range(0.01, double.MaxValue, ErrorMessage = "Amount must be greater than 0")]
-    public decimal Amount { get; set; }
+    public double Amount { get; set; }
 
     [Required]
     [StringLength(50, ErrorMessage = "Invoice number too long")]

@@ -66,7 +66,7 @@ public class PaymentController : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreatePayment([FromBody] decimal amount)
+    public async Task<IActionResult> CreatePayment([FromBody] double amount)
     {
         var request = new BkashCreatePaymentRequest
         {
@@ -185,7 +185,7 @@ public async Task<IActionResult> ProcessRefund(
 public record RefundRequest(
     string PaymentId,
     string TransactionId,
-    decimal Amount,
+    double Amount,
     string OrderId,
     string Reason
 );
@@ -239,7 +239,7 @@ app.MapHealthChecks("/health");
 
 // Create payment endpoint
 app.MapPost("/payment/create", async (
-    decimal amount,
+    double amount,
     IBkashPaymentService bkashService) =>
 {
     var request = new BkashCreatePaymentRequest
@@ -339,7 +339,7 @@ Proper error handling with specific exception types:
 using Bikiran.Payment.Bkash.Exceptions;
 
 [HttpPost("create")]
-public async Task<IActionResult> CreatePayment([FromBody] decimal amount)
+public async Task<IActionResult> CreatePayment([FromBody] double amount)
 {
     try
     {

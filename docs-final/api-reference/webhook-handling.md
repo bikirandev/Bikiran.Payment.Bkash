@@ -117,7 +117,7 @@ public class BkashWebhookNotification
     public string PaymentID { get; set; }              // Payment identifier
     public string TrxID { get; set; }                  // Transaction ID
     public string TransactionStatus { get; set; }      // "Completed", "Cancelled", etc.
-    public decimal Amount { get; set; }                // Transaction amount
+    public double Amount { get; set; }                // Transaction amount
     public string Currency { get; set; }               // Currency code
     public string MerchantInvoiceNumber { get; set; }  // Your invoice number
     public string CustomerMsisdn { get; set; }         // Customer phone

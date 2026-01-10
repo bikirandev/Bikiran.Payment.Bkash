@@ -40,7 +40,7 @@ Task<BkashCreatePaymentResponse> CreatePaymentAsync(
 ```csharp
 public class BkashCreatePaymentRequest
 {
-    public decimal Amount { get; set; }                  // Required
+    public double Amount { get; set; }                  // Required
     public string Intent { get; set; }                   // Required: "sale" or "authorization"
     public string MerchantInvoiceNumber { get; set; }    // Required: Your invoice/order ID
     public string PayerReference { get; set; }           // Required: Customer phone number or unique ID
@@ -61,7 +61,7 @@ public class BkashCreatePaymentResponse : BkashBaseResponse
     public string SuccessCallbackURL { get; set; }       // Success redirect URL
     public string FailureCallbackURL { get; set; }       // Failure redirect URL
     public string CancelledCallbackURL { get; set; }     // Cancel redirect URL
-    public decimal Amount { get; set; }                  // Payment amount
+    public double Amount { get; set; }                  // Payment amount
     public string Intent { get; set; }                   // Payment intent
     public string Currency { get; set; }                 // Currency code
     public string MerchantInvoiceNumber { get; set; }    // Your invoice number
@@ -145,7 +145,7 @@ public class BkashExecutePaymentResponse : BkashBaseResponse
     public string PaymentID { get; set; }                // Payment identifier
     public string TrxID { get; set; }                    // bKash transaction ID
     public string TransactionStatus { get; set; }        // "Completed", "Cancelled", etc.
-    public decimal Amount { get; set; }                  // Transaction amount
+    public double Amount { get; set; }                  // Transaction amount
     public string Currency { get; set; }                 // Currency code
     public string Intent { get; set; }                   // Payment intent
     public string MerchantInvoiceNumber { get; set; }    // Your invoice number
@@ -229,7 +229,7 @@ public class BkashQueryPaymentResponse : BkashBaseResponse
     public string PaymentID { get; set; }                // Payment identifier
     public string TrxID { get; set; }                    // Transaction ID (if executed)
     public string TransactionStatus { get; set; }        // Current status
-    public decimal Amount { get; set; }                  // Payment amount
+    public double Amount { get; set; }                  // Payment amount
     public string Currency { get; set; }                 // Currency code
     public string Intent { get; set; }                   // Payment intent
     public string MerchantInvoiceNumber { get; set; }    // Your invoice number

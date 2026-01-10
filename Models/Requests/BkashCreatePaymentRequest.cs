@@ -37,7 +37,7 @@ public class BkashCreatePaymentRequest
     /// Payment amount (must be greater than 0)
     /// </summary>
     [JsonProperty("amount")]
-    public decimal Amount { get; set; }
+    public double Amount { get; set; }
 
     /// <summary>
     /// Currency code (default: BDT)

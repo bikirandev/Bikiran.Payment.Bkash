@@ -25,7 +25,7 @@ public class BkashRefundPaymentRequest
 {
     public string PaymentId { get; set; }        // Required: Original payment ID
     public string TrxId { get; set; }            // Required: Original transaction ID
-    public decimal RefundAmount { get; set; }    // Required: Amount to refund
+    public double RefundAmount { get; set; }    // Required: Amount to refund
     public string Sku { get; set; }              // Optional: Product/Order SKU
     public string Reason { get; set; }           // Optional: Refund reason
 }
@@ -39,7 +39,7 @@ public class BkashRefundPaymentResponse : BkashBaseResponse
     public string RefundTrxID { get; set; }      // Refund transaction ID
     public string OriginalTrxID { get; set; }    // Original transaction ID
     public string TransactionStatus { get; set; } // Refund status
-    public decimal RefundAmount { get; set; }    // Refunded amount
+    public double RefundAmount { get; set; }    // Refunded amount
     public DateTime CompletionTime { get; set; } // Refund completion time
     
     public bool IsCompleted => TransactionStatus == "Completed";
@@ -101,14 +101,14 @@ Task<BkashRefundStatusResponse> QueryRefundStatusAsync(
 public class BkashRefundStatusResponse : BkashBaseResponse
 {
     public string OriginalTrxId { get; set; }
-    public decimal OriginalTrxAmount { get; set; }
+    public double OriginalTrxAmount { get; set; }
     public List<RefundTransaction> RefundTransactions { get; set; }
 }
 
 public class RefundTransaction
 {
     public string RefundTrxId { get; set; }
-    public decimal Amount { get; set; }
+    public double Amount { get; set; }
     public string TransactionStatus { get; set; }
     public DateTime CompletionTime { get; set; }
 }
