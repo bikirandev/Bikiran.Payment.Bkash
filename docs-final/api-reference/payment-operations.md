@@ -10,15 +10,15 @@ The main service interface for payment operations.
 public interface IBkashPaymentService
 {
     Task<BkashCreatePaymentResponse> CreatePaymentAsync(
-        BkashCreatePaymentRequest request, 
+        BkashCreatePaymentRequest request,
         CancellationToken cancellationToken = default);
-    
+
     Task<BkashExecutePaymentResponse> ExecutePaymentAsync(
-        string paymentId, 
+        string paymentId,
         CancellationToken cancellationToken = default);
-    
+
     Task<BkashQueryPaymentResponse> QueryPaymentAsync(
-        string paymentId, 
+        string paymentId,
         CancellationToken cancellationToken = default);
 }
 ```
@@ -43,8 +43,9 @@ public class BkashCreatePaymentRequest
     public decimal Amount { get; set; }                  // Required
     public string Intent { get; set; }                   // Required: "sale" or "authorization"
     public string MerchantInvoiceNumber { get; set; }    // Required: Your invoice/order ID
+    public string PayerReference { get; set; }           // Required: Customer phone number or unique ID
     public string Currency { get; set; } = "BDT";        // Optional: Default "BDT"
-    public string Mode { get; set; } = "0001";           // Optional: Payment mode
+    public string Mode { get; set; } = "0011";           // Optional: Payment mode (0011 = Tokenized Checkout)
     public string CallbackURL { get; set; }              // Optional: Callback URL
 }
 ```
@@ -64,7 +65,7 @@ public class BkashCreatePaymentResponse : BkashBaseResponse
     public string Intent { get; set; }                   // Payment intent
     public string Currency { get; set; }                 // Currency code
     public string MerchantInvoiceNumber { get; set; }    // Your invoice number
-    
+
     // Inherited from BkashBaseResponse
     public string StatusCode { get; set; }
     public string StatusMessage { get; set; }
@@ -79,6 +80,7 @@ var request = new BkashCreatePaymentRequest
 {
     Amount = 1000.50m,
     MerchantInvoiceNumber = $"INV-{DateTime.UtcNow.Ticks}",
+    PayerReference = "01712345678",  // Customer phone number
     Intent = "sale",
     Currency = "BDT",
     CallbackURL = "https://yoursite.com/payment/callback"
@@ -95,27 +97,29 @@ if (response.IsSuccess)
 
 ### Payment Modes
 
-| Mode | Description |
-|------|-------------|
-| `0001` | Checkout (one-time payment) - Default |
-| `0011` | Agreement (subscription/recurring) |
-| `0002` | Pre-authorization |
+| Mode   | Description                                                |
+| ------ | ---------------------------------------------------------- |
+| `0011` | Tokenized Checkout (URL-based, one-time payment) - Default |
+| `0001` | Non-tokenized Checkout (legacy)                            |
+| `0002` | Pre-authorization                                          |
 
 ### Validation Rules
 
 - `Amount` must be greater than 0
 - `Intent` must be "sale" or "authorization"
 - `MerchantInvoiceNumber` is required and should be unique
+- `PayerReference` is required (customer phone number or unique ID)
 - `Currency` must be "BDT"
+- `Mode` defaults to "0011" for Tokenized Checkout
 
 ### Common Errors
 
-| Status Code | Description |
-|-------------|-------------|
-| `2001` | Invalid amount |
-| `2002` | Invalid merchant invoice number |
-| `2027` | Configuration error |
-| `9999` | System error |
+| Status Code | Description                     |
+| ----------- | ------------------------------- |
+| `2001`      | Invalid amount                  |
+| `2002`      | Invalid merchant invoice number |
+| `2027`      | Configuration error             |
+| `9999`      | System error                    |
 
 ## ExecutePaymentAsync
 
@@ -145,9 +149,10 @@ public class BkashExecutePaymentResponse : BkashBaseResponse
     public string Currency { get; set; }                 // Currency code
     public string Intent { get; set; }                   // Payment intent
     public string MerchantInvoiceNumber { get; set; }    // Your invoice number
+    public string PayerReference { get; set; }           // Customer reference from request
     public DateTime PaymentExecuteTime { get; set; }     // Execution timestamp
     public string CustomerMsisdn { get; set; }           // Customer phone number
-    
+
     public bool IsCompleted => TransactionStatus == "Completed";
     public bool IsCancelled => TransactionStatus == "Cancelled";
 }
@@ -163,12 +168,12 @@ var status = Request.Query["status"];
 if (status == "success")
 {
     var response = await _bkashService.ExecutePaymentAsync(paymentId);
-    
+
     if (response.IsCompleted)
     {
         // Payment successful - update order status
         await UpdateOrderStatus(response.MerchantInvoiceNumber, "Paid");
-        
+
         return Ok(new
         {
             success = true,
@@ -181,11 +186,11 @@ if (status == "success")
 
 ### Transaction Status Values
 
-| Status | Description |
-|--------|-------------|
+| Status      | Description                    |
+| ----------- | ------------------------------ |
 | `Completed` | Payment successfully completed |
-| `Cancelled` | Payment cancelled by customer |
-| `Failed` | Payment failed |
+| `Cancelled` | Payment cancelled by customer  |
+| `Failed`    | Payment failed                 |
 
 ### Timeout
 
@@ -194,11 +199,11 @@ if (status == "success")
 
 ### Common Errors
 
-| Status Code | Description |
-|-------------|-------------|
-| `2014` | Payment already executed |
-| `2029` | Payment expired |
-| `2062` | Payment not found |
+| Status Code | Description              |
+| ----------- | ------------------------ |
+| `2014`      | Payment already executed |
+| `2029`      | Payment expired          |
+| `2062`      | Payment not found        |
 
 ## QueryPaymentAsync
 
@@ -228,12 +233,29 @@ public class BkashQueryPaymentResponse : BkashBaseResponse
     public string Currency { get; set; }                 // Currency code
     public string Intent { get; set; }                   // Payment intent
     public string MerchantInvoiceNumber { get; set; }    // Your invoice number
+    public string PayerReference { get; set; }           // Customer reference from request
     public DateTime CreateTime { get; set; }             // Creation timestamp
     public DateTime UpdateTime { get; set; }             // Last update timestamp
     public DateTime? PaymentExecuteTime { get; set; }    // Execution time (if completed)
     public string CustomerMsisdn { get; set; }           // Customer phone (if available)
 }
 ```
+
+### Implementation Note
+
+**Important:** The Query Payment endpoint uses a **POST** request with a JSON body, not a GET request.
+
+**Endpoint:** `POST /tokenized/checkout/payment/status`
+
+**Request Body:**
+
+```json
+{
+  "paymentID": "TR001ABC123"
+}
+```
+
+This is different from older API versions that used GET with URL parameters.
 
 ### Example Usage
 

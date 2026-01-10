@@ -101,6 +101,7 @@ public class PaymentController : ControllerBase
         {
             Amount = amount,
             MerchantInvoiceNumber = $"INV-{DateTime.UtcNow.Ticks}",
+            PayerReference = "01712345678",  // Customer phone number
             Intent = "sale"
         };
 

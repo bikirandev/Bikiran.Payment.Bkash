@@ -72,6 +72,7 @@ public class PaymentController : ControllerBase
         {
             Amount = amount,
             MerchantInvoiceNumber = $"INV-{DateTime.UtcNow.Ticks}",
+            PayerReference = "01712345678",  // Customer phone number
             Intent = "sale",
             Currency = "BDT"
         };
@@ -245,6 +246,7 @@ app.MapPost("/payment/create", async (
     {
         Amount = amount,
         MerchantInvoiceNumber = $"INV-{DateTime.UtcNow.Ticks}",
+        PayerReference = "01712345678",  // Customer phone number
         Intent = "sale"
     };
 
@@ -317,6 +319,7 @@ var request = new BkashCreatePaymentRequest
 {
     Amount = 100,
     MerchantInvoiceNumber = $"INV-{DateTime.UtcNow.Ticks}",
+    PayerReference = "01712345678",  // Customer phone number
     Intent = "sale"
 };
 
@@ -344,6 +347,7 @@ public async Task<IActionResult> CreatePayment([FromBody] decimal amount)
         {
             Amount = amount,
             MerchantInvoiceNumber = $"INV-{DateTime.UtcNow.Ticks}",
+            PayerReference = "01712345678",  // Customer phone number
             Intent = "sale"
         };
 

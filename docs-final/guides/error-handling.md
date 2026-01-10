@@ -199,6 +199,7 @@ public async Task<IActionResult> CreatePayment([FromBody] PaymentRequest request
         {
             Amount = request.Amount,
             MerchantInvoiceNumber = request.InvoiceNumber,
+            PayerReference = request.CustomerPhone,  // Required field
             Intent = "sale"
         };
 
@@ -337,6 +338,10 @@ public class BkashCreatePaymentRequest
     [Required]
     [StringLength(50, ErrorMessage = "Invoice number too long")]
     public string MerchantInvoiceNumber { get; set; }
+
+    [Required]
+    [StringLength(50, ErrorMessage = "Payer reference required")]
+    public string PayerReference { get; set; }  // Customer phone or ID
 
     [Required]
     [RegularExpression("sale|authorization")]

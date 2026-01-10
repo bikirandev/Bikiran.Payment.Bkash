@@ -23,26 +23,27 @@ Customer → Your Site → bKash → Customer → Your Site → Complete
 Customer clicks "Pay with bKash" on your website/app.
 
 **Frontend (HTML/JavaScript):**
+
 ```html
 <button id="pay-button">Pay with bKash</button>
 
 <script>
-document.getElementById('pay-button').addEventListener('click', async () => {
+  document.getElementById("pay-button").addEventListener("click", async () => {
     const amount = 1000; // Amount in BDT
-    
-    const response = await fetch('/api/payment/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount })
+
+    const response = await fetch("/api/payment/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount }),
     });
-    
+
     const data = await response.json();
-    
+
     if (data.success) {
-        // Redirect to bKash
-        window.location.href = data.bkashUrl;
+      // Redirect to bKash
+      window.location.href = data.bkashUrl;
     }
-});
+  });
 </script>
 ```
 
@@ -51,6 +52,7 @@ document.getElementById('pay-button').addEventListener('click', async () => {
 Your backend creates a payment request with bKash.
 
 **Backend (C#):**
+
 ```csharp
 [HttpPost("api/payment/create")]
 public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentDto dto)
@@ -60,7 +62,7 @@ public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentDto dto)
     {
         return BadRequest("Invalid amount");
     }
-    
+
     // 2. Create order in your database
     var order = await _orderService.CreateOrderAsync(new Order
     {
@@ -68,24 +70,25 @@ public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentDto dto)
         Status = "Pending",
         CreatedAt = DateTime.UtcNow
     });
-    
+
     // 3. Create bKash payment
     var request = new BkashCreatePaymentRequest
     {
         Amount = dto.Amount,
         MerchantInvoiceNumber = order.Id.ToString(),
+        PayerReference = dto.CustomerPhone ?? "01712345678",  // Customer phone number
         Intent = "sale",
         CallbackURL = "https://yoursite.com/payment/callback"
     };
-    
+
     try
     {
         var response = await _bkashService.CreatePaymentAsync(request);
-        
+
         // 4. Store payment ID in database
         order.PaymentId = response.PaymentID;
         await _orderService.UpdateOrderAsync(order);
-        
+
         // 5. Return bKash URL to frontend
         return Ok(new
         {
@@ -105,6 +108,7 @@ public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentDto dto)
 ### Step 3: Customer Authorizes Payment
 
 Customer is redirected to bKash payment page where they:
+
 1. Enter their bKash account PIN
 2. Review payment details
 3. Confirm or cancel the payment
@@ -120,6 +124,7 @@ https://yoursite.com/payment/callback?paymentID=TR001ABC123&status=success
 ```
 
 Parameters:
+
 - `paymentID`: Payment identifier
 - `status`: "success", "failure", or "cancel"
 
@@ -128,6 +133,7 @@ Parameters:
 Your backend receives the callback and executes the payment.
 
 **Backend (C#):**
+
 ```csharp
 [HttpGet("payment/callback")]
 public async Task<IActionResult> PaymentCallback(
@@ -138,21 +144,21 @@ public async Task<IActionResult> PaymentCallback(
     {
         return BadRequest("Missing paymentID");
     }
-    
+
     // Find order by payment ID
     var order = await _orderService.GetOrderByPaymentIdAsync(paymentID);
     if (order == null)
     {
         return NotFound("Order not found");
     }
-    
+
     if (status == "success")
     {
         try
         {
             // Execute the payment
             var response = await _bkashService.ExecutePaymentAsync(paymentID);
-            
+
             if (response.IsCompleted)
             {
                 // Update order status
@@ -160,7 +166,7 @@ public async Task<IActionResult> PaymentCallback(
                 order.TransactionId = response.TrxID;
                 order.CompletedAt = DateTime.UtcNow;
                 await _orderService.UpdateOrderAsync(order);
-                
+
                 // Redirect to success page
                 return Redirect($"/payment/success?orderId={order.Id}");
             }
@@ -169,17 +175,17 @@ public async Task<IActionResult> PaymentCallback(
                 // Payment execution failed
                 order.Status = "Failed";
                 await _orderService.UpdateOrderAsync(order);
-                
+
                 return Redirect($"/payment/failure?orderId={order.Id}");
             }
         }
         catch (BkashPaymentException ex)
         {
             _logger.LogError(ex, "Payment execution failed for {PaymentId}", paymentID);
-            
+
             order.Status = "Failed";
             await _orderService.UpdateOrderAsync(order);
-            
+
             return Redirect($"/payment/failure?orderId={order.Id}");
         }
     }
@@ -188,7 +194,7 @@ public async Task<IActionResult> PaymentCallback(
         // Customer cancelled payment
         order.Status = "Cancelled";
         await _orderService.UpdateOrderAsync(order);
-        
+
         return Redirect($"/payment/cancelled?orderId={order.Id}");
     }
     else
@@ -196,7 +202,7 @@ public async Task<IActionResult> PaymentCallback(
         // Payment failed
         order.Status = "Failed";
         await _orderService.UpdateOrderAsync(order);
-        
+
         return Redirect($"/payment/failure?orderId={order.Id}");
     }
 }
@@ -207,6 +213,7 @@ public async Task<IActionResult> PaymentCallback(
 Display order confirmation to the customer.
 
 **Success Page:**
+
 ```html
 <h1>Payment Successful!</h1>
 <p>Your payment has been processed successfully.</p>
@@ -369,6 +376,7 @@ if (response.TransactionStatus == "Completed")
 ### Sandbox Test Cards
 
 bKash sandbox provides test scenarios:
+
 - **Success**: Use any valid bKash format number
 - **Insufficient Balance**: Test specific scenarios
 - **Timeout**: Wait 15+ minutes

@@ -15,6 +15,7 @@ dotnet pack --configuration Release --no-build
 ```
 
 Package will be created at:
+
 ```
 bin/Release/Bikiran.Payment.Bkash.{version}.nupkg
 ```
@@ -88,6 +89,7 @@ var request = new BkashCreatePaymentRequest
 {
     Amount = 100,
     MerchantInvoiceNumber = $"TEST-{DateTime.UtcNow.Ticks}",
+    PayerReference = "01712345678",  // Required: Customer phone number
     Intent = "sale"
 };
 
@@ -104,6 +106,7 @@ dotnet run
 ```
 
 Expected output:
+
 ```
 Testing bKash package...
 ✓ Token obtained (length: XXX)

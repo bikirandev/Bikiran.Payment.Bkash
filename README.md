@@ -55,12 +55,13 @@ public class PaymentService
         _bkashService = bkashService;
     }
 
-    public async Task<string> CreatePaymentAsync(decimal amount, string invoiceNumber)
+    public async Task<string> CreatePaymentAsync(decimal amount, string invoiceNumber, string customerPhone)
     {
         var request = new BkashCreatePaymentRequest
         {
             Amount = amount,
             MerchantInvoiceNumber = invoiceNumber,
+            PayerReference = customerPhone,  // Required: Customer phone number
             Intent = "sale"
         };
 
@@ -162,11 +163,13 @@ public IActionResult ReceiveWebhook([FromBody] string payload, [FromHeader(Name 
 
 ## Payment Modes
 
-- `0001` - Checkout (one-time payment)
-- `0011` - Agreement (subscription/auto-debit)
+- `0011` - Tokenized Checkout (URL-based, one-time payment) - **Default for this library**
+- `0001` - Non-tokenized Checkout (legacy)
 - `0002` - Pre-Authorization
 - `0021` - Disbursement
 - `0031` - Refund
+
+> **Note:** This library is designed for Tokenized Checkout (Mode 0011) which is the recommended approach for modern integrations.
 
 ## Error Handling
 

@@ -2,9 +2,15 @@
 
 Welcome to the comprehensive documentation for **Bikiran.Payment.Bkash** - a production-ready .NET library for integrating bKash payment gateway with automatic token management, payment processing, and refund capabilities.
 
-# Bikiran.Payment.Bkash Documentation
+## ⚠️ Important Notice
 
-Welcome to the comprehensive documentation for **Bikiran.Payment.Bkash** - a production-ready .NET library for integrating bKash payment gateway with automatic token management, payment processing, and refund capabilities.
+**[📋 Read Important API Updates](IMPORTANT_API_UPDATES.md)** - Critical changes for bKash Tokenized Checkout v1.2.0-beta compliance:
+
+- ✅ Mandatory `payerReference` field added to all requests
+- ✅ Corrected default Mode from "0001" to "0011" (Tokenized Checkout)
+- ✅ Updated response models with `payerReference` field
+
+All code examples in this documentation have been updated. **Please review if migrating from older versions.**
 
 ## 📚 Documentation Structure
 
