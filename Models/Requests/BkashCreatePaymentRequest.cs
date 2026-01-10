@@ -27,6 +27,13 @@ public class BkashCreatePaymentRequest
     public string CallbackURL { get; set; } = string.Empty;
 
     /// <summary>
+    /// Agreement ID for tokenized payments (optional for checkout mode, required for agreement mode)
+    /// Use " " (single space) for checkout mode if API requires this field
+    /// </summary>
+    [JsonProperty("agreementID")]
+    public string? AgreementID { get; set; }
+
+    /// <summary>
     /// Payment amount (must be greater than 0)
     /// </summary>
     [JsonProperty("amount")]

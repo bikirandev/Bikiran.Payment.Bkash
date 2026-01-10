@@ -32,9 +32,7 @@ public class BkashPaymentService : IBkashPaymentService
     }
 
     /// <inheritdoc/>
-    public async Task<BkashCreatePaymentResponse> CreatePaymentAsync(
-        BkashCreatePaymentRequest request,
-        CancellationToken cancellationToken = default)
+    public async Task<BkashCreatePaymentResponse> CreatePaymentAsync(BkashCreatePaymentRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
 
