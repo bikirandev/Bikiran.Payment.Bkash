@@ -1,6 +1,70 @@
-# Configuration Overview
+# Configuration Guide
 
 Complete guide to configuring Bikiran.Payment.Bkash for all environments and scenarios.
+
+## Quick Reference
+
+### Environment Variables
+
+```env
+BKASH__APPKEY=your-app-key
+BKASH__APPSECRET=your-app-secret
+BKASH__USERNAME=your-username
+BKASH__PASSWORD=your-password
+BKASH__ENVIRONMENT=Sandbox
+BKASH__TIMEOUTSECONDS=30
+BKASH__TOKENREFRESHBUFFERSECONDS=300
+```
+
+⚠️ **Note:** Use double underscore `__` for nested configuration
+
+### JSON Format (appsettings.json)
+
+```json
+{
+  "Bkash": {
+    "AppKey": "your-app-key",
+    "AppSecret": "your-app-secret",
+    "Username": "your-username",
+    "Password": "your-password",
+    "Environment": "Sandbox",
+    "TimeoutSeconds": 30,
+    "TokenRefreshBufferSeconds": 300
+  }
+}
+```
+
+### Sandbox Credentials
+
+Default bKash sandbox credentials for testing:
+
+```env
+BKASH__APPKEY=4f6o0cjiki2rfm34kfdadl1eqq
+BKASH__APPSECRET=2is7hdktrekvrbljjh44ll3d9l1dtjo4pasmjvs5vl5qr3fug4b
+BKASH__USERNAME=sandboxTokenizedUser02
+BKASH__PASSWORD=sandboxTokenizedUser02@12345
+BKASH__ENVIRONMENT=Sandbox
+```
+
+## Configuration Options
+
+### Required Settings
+
+| Setting       | Description                   | Example                      |
+| ------------- | ----------------------------- | ---------------------------- |
+| `AppKey`      | Your bKash application key    | `4f6o0cjiki2rfm34kfdadl1eqq` |
+| `AppSecret`   | Your bKash application secret | `2is7hdkt...`                |
+| `Username`    | Your bKash merchant username  | `sandboxTokenizedUser02`     |
+| `Password`    | Your bKash merchant password  | `sandboxToken...@12345`      |
+| `Environment` | Target environment            | `Sandbox` or `Production`    |
+
+### Optional Settings
+
+| Setting                     | Description                                    | Default                            |
+| --------------------------- | ---------------------------------------------- | ---------------------------------- |
+| `TimeoutSeconds`            | HTTP request timeout in seconds                | `30`                               |
+| `TokenRefreshBufferSeconds` | Refresh tokens this many seconds before expiry | `300` (5 minutes)                  |
+| `BaseUrl`                   | Custom API base URL (rarely needed)            | Auto-selected based on Environment |
 
 ## Configuration Methods
 
@@ -11,31 +75,12 @@ Bikiran.Payment.Bkash supports multiple configuration methods to fit different d
 3. **.env Files** - Great for local development
 4. **Secret Managers** - Recommended for production (Azure Key Vault, AWS Secrets Manager, etc.)
 
-## Configuration Options
+### Method 1: appsettings.json
 
-### Required Settings
-
-| Setting | Description | Example |
-|---------|-------------|---------|
-| `AppKey` | Your bKash application key | `4f6o0cjiki2rfm34kfdadl1eqq` |
-| `AppSecret` | Your bKash application secret | `2is7hdkt...` |
-| `Username` | Your bKash merchant username | `sandboxTokenizedUser02` |
-| `Password` | Your bKash merchant password | `sandboxToken...@12345` |
-| `Environment` | Target environment | `Sandbox` or `Production` |
-
-### Optional Settings
-
-| Setting | Description | Default |
-|---------|-------------|---------|
-| `TimeoutSeconds` | HTTP request timeout in seconds | `30` |
-| `TokenRefreshBufferSeconds` | Refresh tokens this many seconds before expiry | `300` (5 minutes) |
-| `BaseUrl` | Custom API base URL (rarely needed) | Auto-selected based on Environment |
-
-## Method 1: appsettings.json
-
-### Basic Configuration
+#### Basic Configuration
 
 **appsettings.json:**
+
 ```json
 {
   "Bkash": {
@@ -49,13 +94,15 @@ Bikiran.Payment.Bkash supports multiple configuration methods to fit different d
 ```
 
 **Program.cs:**
+
 ```csharp
 builder.Services.AddBkashPayment(builder.Configuration);
 ```
 
-### Environment-Specific Configuration
+#### Environment-Specific Configuration
 
 **appsettings.Development.json:**
+
 ```json
 {
   "Bkash": {
@@ -70,6 +117,7 @@ builder.Services.AddBkashPayment(builder.Configuration);
 ```
 
 **appsettings.Production.json:**
+
 ```json
 {
   "Bkash": {
@@ -83,21 +131,23 @@ builder.Services.AddBkashPayment(builder.Configuration);
 }
 ```
 
-### Pros and Cons
+#### Pros and Cons
 
 ✅ **Pros:**
+
 - Built into .NET, no additional packages needed
 - Easy to manage multiple environments
 - Strongly typed with IConfiguration
 
 ❌ **Cons:**
+
 - Credentials in files can be accidentally committed
 - Not ideal for production deployments
 - Requires separate files for each environment
 
-## Method 2: Environment Variables
+### Method 2: Environment Variables
 
-### Format
+#### Format
 
 Environment variables use double underscore `__` for nested configuration:
 
@@ -109,9 +159,10 @@ BKASH__PASSWORD=your-password
 BKASH__ENVIRONMENT=Sandbox
 ```
 
-### Setting Environment Variables
+#### Setting Environment Variables
 
 **Windows (PowerShell):**
+
 ```powershell
 $env:BKASH__APPKEY = "your-key"
 $env:BKASH__APPSECRET = "your-secret"
@@ -120,7 +171,8 @@ $env:BKASH__PASSWORD = "your-password"
 $env:BKASH__ENVIRONMENT = "Sandbox"
 ```
 
-**Linux/macOS:**
+**Linux/macOS (Bash):**
+
 ```bash
 export BKASH__APPKEY="your-key"
 export BKASH__APPSECRET="your-secret"
@@ -129,7 +181,7 @@ export BKASH__PASSWORD="your-password"
 export BKASH__ENVIRONMENT="Sandbox"
 ```
 
-### Using in Code
+#### Using in Code
 
 No code changes needed - .NET automatically loads environment variables:
 
@@ -137,27 +189,31 @@ No code changes needed - .NET automatically loads environment variables:
 builder.Services.AddBkashPayment(builder.Configuration);
 ```
 
-### Pros and Cons
+#### Pros and Cons
 
 ✅ **Pros:**
+
 - No files to manage
 - Cloud-friendly and container-ready
 - Harder to accidentally commit credentials
 
 ❌ **Cons:**
+
 - Can be difficult to manage many variables
 - Different methods for each OS
 
-## Method 3: .env Files (Local Development)
+### Method 3: .env Files (Local Development)
 
-### Setup
+#### Setup
 
 1. Install the DotNetEnv package:
+
 ```bash
 dotnet add package DotNetEnv
 ```
 
 2. Create a `.env` file in your project root:
+
 ```env
 BKASH__APPKEY=4f6o0cjiki2rfm34kfdadl1eqq
 BKASH__APPSECRET=2is7hdktrekvrbljjh44ll3d9l1dtjo4pasmjvs5vl5qr3fug4b
@@ -167,6 +223,7 @@ BKASH__ENVIRONMENT=Sandbox
 ```
 
 3. Load in Program.cs:
+
 ```csharp
 using DotNetEnv;
 
@@ -178,13 +235,14 @@ builder.Services.AddBkashPayment(builder.Configuration);
 ```
 
 4. **Important:** Add `.env` to `.gitignore`:
+
 ```gitignore
 .env
 .env.local
 .env.*.local
 ```
 
-### Multiple Environment Files
+#### Multiple Environment Files
 
 You can maintain separate .env files:
 
@@ -193,31 +251,35 @@ You can maintain separate .env files:
 - `.env.sandbox` - Sandbox credentials
 - `.env.production` - Production credentials (never commit)
 
-### Pros and Cons
+#### Pros and Cons
 
 ✅ **Pros:**
+
 - Easy to manage locally
 - Can have multiple files for different environments
 - Popular pattern in the industry
 
 ❌ **Cons:**
+
 - Requires additional package (DotNetEnv)
 - Must remember to exclude from version control
 - Not automatically available in deployed environments
 
-## Method 4: Secret Managers (Production)
+### Method 4: Secret Managers (Production)
 
 For production deployments, use dedicated secret management services.
 
-### Azure Key Vault
+#### Azure Key Vault
 
 **Setup:**
+
 ```bash
 dotnet add package Azure.Extensions.AspNetCore.Configuration.Secrets
 dotnet add package Azure.Identity
 ```
 
 **Program.cs:**
+
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
 
@@ -233,32 +295,37 @@ builder.Services.AddBkashPayment(builder.Configuration);
 ```
 
 Store secrets in Key Vault as:
+
 - `Bkash--AppKey`
 - `Bkash--AppSecret`
 - `Bkash--Username`
 - `Bkash--Password`
 
-### AWS Secrets Manager
+#### AWS Secrets Manager
 
 **Setup:**
+
 ```bash
 dotnet add package Amazon.Extensions.Configuration.SystemsManager
 ```
 
 **Program.cs:**
+
 ```csharp
 if (builder.Environment.IsProduction())
 {
     builder.Configuration.AddSecretsManager(
         configurator: options =>
         {
-            options.SecretFilter = secret => 
+            options.SecretFilter = secret =>
                 secret.Name.StartsWith("bkash/");
         });
 }
 ```
 
-## Sandbox Configuration
+## Environment-Specific Configuration
+
+### Sandbox Configuration
 
 For testing and development, use bKash sandbox:
 
@@ -275,10 +342,11 @@ For testing and development, use bKash sandbox:
 ```
 
 **Sandbox URLs:**
+
 - API Base: `https://tokenized.sandbox.bka.sh`
 - Payment Page: `https://sandbox.bka.sh/checkout`
 
-## Production Configuration
+### Production Configuration
 
 For live transactions:
 
@@ -295,15 +363,17 @@ For live transactions:
 ```
 
 **Production URLs:**
+
 - API Base: `https://tokenized.pay.bka.sh`
 - Payment Page: `https://pay.bka.sh/checkout`
 
 **⚠️ Important:**
+
 - Never use sandbox credentials in production
 - Never commit production credentials to source control
 - Use secret managers (Key Vault, Secrets Manager) in production
 
-## Programmatic Configuration
+### Programmatic Configuration
 
 You can also configure programmatically:
 
@@ -352,6 +422,12 @@ logger.LogInformation("  AppKey Length: {Length}", config.Value.AppKey?.Length ?
 logger.LogInformation("  Timeout: {Timeout}s", config.Value.TimeoutSeconds);
 ```
 
+Test your configuration via health endpoint:
+
+```bash
+curl http://localhost:5000/health
+```
+
 ## Configuration Best Practices
 
 ### ✅ DO
@@ -359,9 +435,10 @@ logger.LogInformation("  Timeout: {Timeout}s", config.Value.TimeoutSeconds);
 1. **Use different credentials for each environment**
 2. **Store production credentials in secret managers**
 3. **Add `.env` to `.gitignore`**
-4. **Rotate credentials regularly**
+4. **Rotate credentials regularly (every 90 days)**
 5. **Use the lowest timeout that works for your needs**
 6. **Test configuration in each environment**
+7. **Validate configuration at startup**
 
 ### ❌ DON'T
 
@@ -371,13 +448,43 @@ logger.LogInformation("  Timeout: {Timeout}s", config.Value.TimeoutSeconds);
 4. **Don't log sensitive configuration values**
 5. **Don't hardcode credentials in code**
 
+## Common Issues
+
+| Issue                           | Solution                             |
+| ------------------------------- | ------------------------------------ |
+| Variables not loading           | Check double underscore `__` syntax  |
+| Authentication fails            | Verify credentials match environment |
+| Wrong environment               | Check `BKASH__ENVIRONMENT` value     |
+| Timeout errors                  | Increase `BKASH__TIMEOUTSECONDS`     |
+| Configuration section not found | Check appsettings.json structure     |
+
+## Security Checklist
+
+- [ ] Never commit `.env` files with credentials
+- [ ] Add `.env` to `.gitignore`
+- [ ] Use different credentials per environment
+- [ ] Use secret managers in production
+- [ ] Rotate credentials regularly
+- [ ] Restrict access to production credentials
+- [ ] Validate configuration at startup
+- [ ] Monitor failed authentication attempts
+
+## Files to Exclude from Git
+
+```gitignore
+.env
+.env.local
+.env.production
+.env.*.local
+appsettings.Production.json  # if it contains credentials
+```
+
 ## Next Steps
 
-- 📖 [Environment Setup Guide](environment-setup.md) - Platform-specific setup instructions
-- 🎯 [Quick Reference](quick-reference.md) - Quick configuration cheat sheet
-- 🚀 [Production Deployment](../guides/production-deployment.md) - Deploy to production
+- 📖 [Environment Setup](environment-setup.md) - Platform-specific deployment setup
+- 🚀 [Quick Start Guide](../getting-started/quick-start.md) - Get started with the library
 - 🔒 [Security Best Practices](../guides/security-best-practices.md) - Secure your configuration
 
 ---
 
-Need help? Check the [troubleshooting section](environment-setup.md#troubleshooting) or [open an issue](https://github.com/bikirandev/Bikiran.Payment.Bkash/issues).
+Need help? Check the [Documentation Index](../README.md) or [open an issue](https://github.com/bikirandev/Bikiran.Payment.Bkash/issues).

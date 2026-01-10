@@ -2,22 +2,30 @@
 
 Welcome to the comprehensive documentation for **Bikiran.Payment.Bkash** - a production-ready .NET library for integrating bKash payment gateway with automatic token management, payment processing, and refund capabilities.
 
+# Bikiran.Payment.Bkash Documentation
+
+Welcome to the comprehensive documentation for **Bikiran.Payment.Bkash** - a production-ready .NET library for integrating bKash payment gateway with automatic token management, payment processing, and refund capabilities.
+
 ## 📚 Documentation Structure
 
 ### 🚀 Getting Started
+
 Start here if you're new to the library:
+
 - [Quick Start Guide](getting-started/quick-start.md) - Get up and running in 5 minutes
-- [Installation Guide](getting-started/installation.md) - Detailed installation instructions
-- [Basic Examples](getting-started/basic-examples.md) - Simple code examples to get started
+- [Code Examples](getting-started/examples.md) - Comprehensive code examples
 
 ### ⚙️ Configuration
+
 Learn how to configure the library for your environment:
-- [Configuration Overview](configuration/overview.md) - All configuration options explained
-- [Environment Setup](configuration/environment-setup.md) - Setup for development, staging, and production
-- [Quick Reference](configuration/quick-reference.md) - Quick configuration cheat sheet
+
+- [Configuration Guide](configuration/configuration-guide.md) - All configuration options and methods
+- [Environment Setup](configuration/environment-setup.md) - Platform-specific deployment setup
 
 ### 📖 API Reference
+
 Detailed API documentation:
+
 - [Payment Operations](api-reference/payment-operations.md) - Create, execute, and query payments
 - [Refund Operations](api-reference/refund-operations.md) - Process and track refunds
 - [Token Management](api-reference/token-management.md) - Automatic token handling
@@ -25,15 +33,17 @@ Detailed API documentation:
 - [Health Checks](api-reference/health-checks.md) - Monitor service health
 
 ### 📘 Guides
+
 In-depth guides for common scenarios:
+
 - [Payment Flow Guide](guides/payment-flow.md) - Complete payment flow walkthrough
-- [Webhook Integration](guides/webhook-integration.md) - Implementing webhooks securely
 - [Error Handling](guides/error-handling.md) - Handling errors and exceptions
-- [Production Deployment](guides/production-deployment.md) - Deploy to various platforms
 - [Security Best Practices](guides/security-best-practices.md) - Keep your integration secure
 
 ### 🔧 Development
+
 For contributors and developers:
+
 - [Local Development Setup](development/local-setup.md) - Setup development environment
 - [Testing Guide](development/testing.md) - Test the package locally
 - [Project Structure](development/project-structure.md) - Understanding the codebase
@@ -43,18 +53,19 @@ For contributors and developers:
 ## 🎯 Quick Links
 
 ### Essential Resources
+
 - **Main README**: [Project Overview](../README.md)
 - **NuGet Package**: [Bikiran.Payment.Bkash](https://www.nuget.org/packages/Bikiran.Payment.Bkash)
 - **GitHub Repository**: [bikirandev/Bikiran.Payment.Bkash](https://github.com/bikirandev/Bikiran.Payment.Bkash)
 - **bKash Developer Portal**: [developer.bka.sh](https://developer.bka.sh/)
 
 ### Common Tasks
-- [Install the package](getting-started/installation.md#installation-from-nuget)
-- [Configure for sandbox](configuration/overview.md#sandbox-configuration)
-- [Create your first payment](getting-started/basic-examples.md#creating-a-payment)
-- [Setup webhooks](guides/webhook-integration.md)
-- [Deploy to Azure](guides/production-deployment.md#azure-app-service)
-- [Deploy to AWS](guides/production-deployment.md#aws-elastic-beanstalk)
+
+- [Install the package](getting-started/quick-start.md#installation)
+- [Configure for sandbox](configuration/configuration-guide.md#sandbox-configuration)
+- [Create your first payment](getting-started/examples.md#creating-a-payment)
+- [Setup webhooks](api-reference/webhook-handling.md)
+- [Deploy to production](configuration/environment-setup.md#production-deployment-checklist)
 
 ## 🌟 Features
 
@@ -71,12 +82,15 @@ For contributors and developers:
 ## 🆘 Getting Help
 
 ### Documentation
+
 If you can't find what you're looking for:
+
 1. Check the [API Reference](api-reference/) for specific methods
 2. Browse the [Guides](guides/) for detailed walkthroughs
-3. Review the [Configuration](configuration/) section for setup issues
+3. Review the [Configuration Guide](configuration/configuration-guide.md) for setup issues
 
 ### Support
+
 - **Issues**: [GitHub Issues](https://github.com/bikirandev/Bikiran.Payment.Bkash/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/bikirandev/Bikiran.Payment.Bkash/discussions)
 - **Email**: merchant.service@bka.sh (for bKash-specific questions)
@@ -88,9 +102,12 @@ If you can't find what you're looking for:
 - **License**: MIT
 - **Last Updated**: January 2025
 
-## 🔄 Migration Guides
+## 🔄 Recent Updates
 
-- [Migrating from v0.x to v1.0](development/changelog.md#migration-guide) (if applicable)
+- **Consolidated Documentation** - Streamlined from 20 to 13 focused documents
+- **Removed Duplicates** - Eliminated redundant content across configuration and getting started sections
+- **Enhanced Guides** - Expanded error handling with comprehensive exception details
+- **Improved Navigation** - Clearer structure with better cross-references
 
 ---
 

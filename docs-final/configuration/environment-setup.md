@@ -17,11 +17,13 @@ Platform-specific configuration instructions for Bikiran.Payment.Bkash across di
 ### Using .env Files (Recommended)
 
 **Step 1: Install DotNetEnv**
+
 ```bash
 dotnet add package DotNetEnv
 ```
 
 **Step 2: Create `.env` file**
+
 ```env
 BKASH__APPKEY=4f6o0cjiki2rfm34kfdadl1eqq
 BKASH__APPSECRET=2is7hdktrekvrbljjh44ll3d9l1dtjo4pasmjvs5vl5qr3fug4b
@@ -31,6 +33,7 @@ BKASH__ENVIRONMENT=Sandbox
 ```
 
 **Step 3: Load in Program.cs**
+
 ```csharp
 using DotNetEnv;
 
@@ -40,6 +43,7 @@ builder.Services.AddBkashPayment(builder.Configuration);
 ```
 
 **Step 4: Add to .gitignore**
+
 ```gitignore
 .env
 .env.local
@@ -49,6 +53,7 @@ builder.Services.AddBkashPayment(builder.Configuration);
 ### Using launchSettings.json (Visual Studio)
 
 **Properties/launchSettings.json:**
+
 ```json
 {
   "profiles": {
@@ -98,12 +103,14 @@ az webapp config appsettings set \
 ### Option 3: Azure Key Vault (Recommended for Production)
 
 **Install packages:**
+
 ```bash
 dotnet add package Azure.Extensions.AspNetCore.Configuration.Secrets
 dotnet add package Azure.Identity
 ```
 
 **Program.cs:**
+
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
 
@@ -119,6 +126,7 @@ builder.Services.AddBkashPayment(builder.Configuration);
 ```
 
 **Store in Key Vault as:**
+
 - `Bkash--AppKey`
 - `Bkash--AppSecret`
 - `Bkash--Username`
@@ -140,6 +148,7 @@ eb setenv \
 ### Option 2: .ebextensions Configuration
 
 Create `.ebextensions/bkash.config`:
+
 ```yaml
 option_settings:
   aws:elasticbeanstalk:application:environment:
@@ -153,24 +162,27 @@ option_settings:
 ### Option 3: AWS Secrets Manager (Recommended for Production)
 
 **Install package:**
+
 ```bash
 dotnet add package Amazon.Extensions.Configuration.SystemsManager
 ```
 
 **Program.cs:**
+
 ```csharp
 if (builder.Environment.IsProduction())
 {
     builder.Configuration.AddSecretsManager(
         configurator: options =>
         {
-            options.SecretFilter = secret => 
+            options.SecretFilter = secret =>
                 secret.Name.StartsWith("bkash/");
         });
 }
 ```
 
 **Store secrets as:**
+
 - `bkash/AppKey`
 - `bkash/AppSecret`
 - `bkash/Username`
@@ -204,7 +216,7 @@ ENTRYPOINT ["dotnet", "YourApp.dll"]
 ### docker-compose.yml
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   api:
@@ -271,35 +283,35 @@ spec:
         app: bkash-api
     spec:
       containers:
-      - name: api
-        image: your-registry/bkash-api:latest
-        ports:
-        - containerPort: 8080
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: "Production"
-        - name: BKASH__APPKEY
-          valueFrom:
-            secretKeyRef:
-              name: bkash-credentials
-              key: appkey
-        - name: BKASH__APPSECRET
-          valueFrom:
-            secretKeyRef:
-              name: bkash-credentials
-              key: appsecret
-        - name: BKASH__USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: bkash-credentials
-              key: username
-        - name: BKASH__PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: bkash-credentials
-              key: password
-        - name: BKASH__ENVIRONMENT
-          value: "Production"
+        - name: api
+          image: your-registry/bkash-api:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"
+            - name: BKASH__APPKEY
+              valueFrom:
+                secretKeyRef:
+                  name: bkash-credentials
+                  key: appkey
+            - name: BKASH__APPSECRET
+              valueFrom:
+                secretKeyRef:
+                  name: bkash-credentials
+                  key: appsecret
+            - name: BKASH__USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: bkash-credentials
+                  key: username
+            - name: BKASH__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bkash-credentials
+                  key: password
+            - name: BKASH__ENVIRONMENT
+              value: "Production"
 ```
 
 ## Heroku
@@ -322,24 +334,25 @@ heroku config:unset BKASH__APPKEY
 ## GitHub Actions CI/CD
 
 **.github/workflows/deploy.yml:**
+
 ```yaml
 name: Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 9.0.x
-      
+
       - name: Build
         run: dotnet build
         env:
@@ -348,16 +361,17 @@ jobs:
           BKASH__USERNAME: ${{ secrets.BKASH_USERNAME }}
           BKASH__PASSWORD: ${{ secrets.BKASH_PASSWORD }}
           BKASH__ENVIRONMENT: Production
-      
+
       - name: Test
         run: dotnet test
-      
+
       - name: Deploy
         run: |
           # Your deployment commands here
 ```
 
 **Configure secrets in GitHub:**
+
 1. Go to repository **Settings** → **Secrets and variables** → **Actions**
 2. Add repository secrets:
    - `BKASH_APPKEY`
@@ -370,10 +384,12 @@ jobs:
 ### Environment Variables Not Loading
 
 **Check the naming convention:**
+
 - ✅ Correct: `BKASH__APPKEY` (double underscore)
 - ❌ Wrong: `BKASH_APPKEY` (single underscore)
 
 **Verify configuration:**
+
 ```csharp
 var config = app.Services.GetRequiredService<IOptions<BkashOptions>>();
 Console.WriteLine($"Environment: {config.Value.Environment}");
@@ -390,6 +406,7 @@ Console.WriteLine($"AppKey Length: {config.Value.AppKey?.Length}");
 ### Configuration Override Not Working
 
 Remember the configuration priority:
+
 1. Command line arguments (highest)
 2. Environment variables
 3. User secrets (development only)
@@ -417,21 +434,144 @@ Remember the configuration priority:
 
 ## Platform Comparison
 
-| Platform | Security Level | Ease of Setup | Best For |
-|----------|---------------|---------------|----------|
-| Local .env | 🔒 Low | ⭐⭐⭐ Easy | Development |
-| Azure Key Vault | 🔒🔒🔒 High | ⭐⭐ Medium | Production (Azure) |
-| AWS Secrets Manager | 🔒🔒🔒 High | ⭐⭐ Medium | Production (AWS) |
-| Kubernetes Secrets | 🔒🔒 Medium | ⭐⭐ Medium | Container orchestration |
-| Docker env vars | 🔒🔒 Medium | ⭐⭐⭐ Easy | Containerized apps |
-| GitHub Secrets | 🔒🔒🔒 High | ⭐⭐⭐ Easy | CI/CD pipelines |
+| Platform            | Security Level | Ease of Setup | Best For                |
+| ------------------- | -------------- | ------------- | ----------------------- |
+| Local .env          | 🔒 Low         | ⭐⭐⭐ Easy   | Development             |
+| Azure Key Vault     | 🔒🔒🔒 High    | ⭐⭐ Medium   | Production (Azure)      |
+| AWS Secrets Manager | 🔒🔒🔒 High    | ⭐⭐ Medium   | Production (AWS)        |
+| Kubernetes Secrets  | 🔒🔒 Medium    | ⭐⭐ Medium   | Container orchestration |
+| Docker env vars     | 🔒🔒 Medium    | ⭐⭐⭐ Easy   | Containerized apps      |
+| GitHub Secrets      | 🔒🔒🔒 High    | ⭐⭐⭐ Easy   | CI/CD pipelines         |
+
+## Production Deployment Checklist
+
+### Pre-Deployment
+
+- [ ] Production credentials obtained from bKash
+- [ ] All tests passing
+- [ ] Security audit completed
+- [ ] Monitoring configured
+- [ ] Health checks working
+- [ ] Backup and recovery plan documented
+- [ ] Rollback plan prepared
+
+### Deployment Best Practices
+
+1. **Use HTTPS** everywhere
+2. **Enable WAF** (Web Application Firewall)
+3. **Implement rate limiting**
+4. **Enable DDoS protection**
+5. **Regular security scans**
+
+### Monitoring & Observability
+
+#### Application Insights (Azure)
+
+```csharp
+builder.Services.AddApplicationInsightsTelemetry();
+```
+
+#### CloudWatch (AWS)
+
+```csharp
+builder.Logging.AddAWSProvider();
+```
+
+#### Custom Metrics
+
+```csharp
+// Track payment metrics
+_metrics.IncrementCounter("payments.created");
+_metrics.RecordValue("payment.amount", amount);
+```
+
+### Health Checks Configuration
+
+```csharp
+app.MapHealthChecks("/health/live");
+app.MapHealthChecks("/health/ready");
+```
+
+Configure monitoring to:
+
+- Check health every 30 seconds
+- Alert if unhealthy for 2 minutes
+- Auto-restart if consistently unhealthy
+
+### Scaling Guidelines
+
+#### Horizontal Scaling
+
+bKash integration supports horizontal scaling:
+
+- Token service is singleton (shared in-memory)
+- Stateless payment operations
+- No sticky sessions required
+
+#### Vertical Scaling
+
+Recommended minimum resources:
+
+- **CPU**: 1 vCPU
+- **Memory**: 512 MB
+- **Network**: Low latency to bKash API
+
+### Disaster Recovery
+
+**Backup Strategy:**
+
+1. Database backups - hourly
+2. Configuration backups - on change
+3. Application logs - retained 90 days
+
+**Recovery Plan:**
+
+1. Identify issue
+2. Check health endpoints
+3. Review logs and metrics
+4. Rollback if necessary
+5. Fix and redeploy
+
+### Performance Optimization
+
+1. Enable response caching where appropriate
+2. Use CDN for static assets
+3. Optimize database queries
+4. Monitor API response times
+5. Set appropriate timeouts
+
+### Post-Deployment Verification
+
+- [ ] Health check endpoints responding
+- [ ] Can create test payment
+- [ ] Webhooks receiving notifications
+- [ ] Logs flowing correctly
+- [ ] Metrics being recorded
+- [ ] Alerts configured
+
+### Monitoring Checklist
+
+- [ ] Payment success rate
+- [ ] Payment failure rate
+- [ ] Average payment time
+- [ ] API error rates
+- [ ] Authentication failures
+- [ ] Webhook delivery rate
+
+### Common Production Issues
+
+| Issue                 | Solution                            |
+| --------------------- | ----------------------------------- |
+| Authentication fails  | Check credentials match environment |
+| Timeouts              | Increase timeout settings           |
+| Webhooks not received | Verify URL and firewall rules       |
+| High error rate       | Check logs and bKash service status |
 
 ## Next Steps
 
-- 📖 [Configuration Overview](overview.md) - All configuration options
-- 🎯 [Quick Reference](quick-reference.md) - Configuration cheat sheet
+- 📖 [Configuration Guide](configuration-guide.md) - All configuration options
 - 🔒 [Security Best Practices](../guides/security-best-practices.md) - Secure your integration
-- 🚀 [Production Deployment](../guides/production-deployment.md) - Deploy your application
+- 📖 [Health Checks](../api-reference/health-checks.md) - Monitor service health
 
 ---
 

@@ -1,6 +1,6 @@
-# Basic Examples
+# Code Examples
 
-Simple, practical code examples to help you get started with common tasks.
+Comprehensive, practical code examples to help you integrate bKash payment processing.
 
 ## Table of Contents
 
@@ -197,11 +197,11 @@ Query the status of a refund:
 ```csharp
 [HttpGet("refund/status/{paymentId}/{transactionId}")]
 public async Task<IActionResult> GetRefundStatus(
-    string paymentId, 
+    string paymentId,
     string transactionId)
 {
     var response = await _bkashService.QueryRefundStatusAsync(
-        paymentId, 
+        paymentId,
         transactionId);
 
     return Ok(new

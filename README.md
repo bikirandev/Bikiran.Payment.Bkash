@@ -106,26 +106,12 @@ BKASH__PASSWORD=your-password
 BKASH__ENVIRONMENT=Sandbox
 ```
 
-📚 **See detailed configuration guides:**
-- [ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.md) - Complete environment configuration guide
-- [QUICK_REFERENCE.md](QUICK_REFERENCE.md) - Quick reference card
-- `.env.example` - Environment variable template
+📚 **For detailed configuration guides:**
 
-### Using .env Files (Recommended for Development)
+- [Configuration Guide](docs-final/configuration/configuration-guide.md) - All configuration methods and options
+- [Environment Setup](docs-final/configuration/environment-setup.md) - Platform-specific deployment setup
 
-1. Copy `.env.example` to `.env`
-2. Update with your credentials
-3. Install DotNetEnv package:
-   ```bash
-   dotnet add package DotNetEnv
-   ```
-4. Load in Program.cs:
-   ```csharp
-   using DotNetEnv;
-   Env.Load();
-   ```
-
-⚠️ **Security Note**: Never commit `.env` files with actual credentials to source control!
+⚠️ **Security Note**: Never commit credentials to source control!
 
 ## API Reference
 
@@ -143,6 +129,14 @@ BKASH__ENVIRONMENT=Sandbox
 - `GrantTokenAsync()` - Request a new token
 - `RefreshTokenAsync(string refreshToken)` - Refresh an existing token
 
+📚 **For complete API documentation, see:**
+
+- [Payment Operations](docs-final/api-reference/payment-operations.md)
+- [Refund Operations](docs-final/api-reference/refund-operations.md)
+- [Token Management](docs-final/api-reference/token-management.md)
+- [Webhook Handling](docs-final/api-reference/webhook-handling.md)
+- [Health Checks](docs-final/api-reference/health-checks.md)
+
 ## Webhook Verification
 
 Verify webhook signatures to ensure authenticity:
@@ -153,15 +147,15 @@ using Bikiran.Payment.Bkash.Utilities;
 public IActionResult ReceiveWebhook([FromBody] string payload, [FromHeader(Name = "X-Signature")] string signature)
 {
     var appSecret = Configuration["Bkash:AppSecret"];
-    
+
     if (!BkashWebhookHelper.VerifyWebhookSignature(payload, signature, appSecret))
     {
         return Unauthorized("Invalid signature");
     }
-    
+
     var notification = JsonConvert.DeserializeObject<BkashWebhookNotification>(payload);
     // Process webhook...
-    
+
     return Ok();
 }
 ```
@@ -199,6 +193,10 @@ catch (BkashException ex)
 }
 ```
 
+📚 **For comprehensive error handling guide:**
+
+- [Error Handling Guide](docs-final/guides/error-handling.md)
+
 ## Advanced Configuration
 
 ### Custom Timeout and Token Refresh
@@ -228,6 +226,17 @@ services.AddBkashPayment(options =>
     options.BaseUrl = "https://custom-bkash-api.example.com";
 });
 ```
+
+## Documentation
+
+📚 **Complete documentation is available in the [docs-final](docs-final/) folder:**
+
+- **[Quick Start Guide](docs-final/getting-started/quick-start.md)** - Get started in 5 minutes
+- **[Code Examples](docs-final/getting-started/examples.md)** - Comprehensive examples
+- **[Configuration Guide](docs-final/configuration/configuration-guide.md)** - All configuration options
+- **[API Reference](docs-final/api-reference/)** - Complete API documentation
+- **[Guides](docs-final/guides/)** - Payment flow, error handling, security
+- **[Development](docs-final/development/)** - Contributing and project structure
 
 ## License
 
