@@ -1,19 +1,50 @@
 # Bikiran.Payment.Bkash
 
-A comprehensive .NET library for integrating bKash payment gateway with automatic token management, payment processing, and refund capabilities.
+[![NuGet](https://img.shields.io/nuget/v/Bikiran.Payment.Bkash.svg)](https://www.nuget.org/packages/Bikiran.Payment.Bkash)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/Bikiran.Payment.Bkash.svg)](https://www.nuget.org/packages/Bikiran.Payment.Bkash)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![.NET](https://img.shields.io/badge/.NET-9.0-purple.svg)](https://dotnet.microsoft.com/download)
+
+A comprehensive .NET library for integrating **bKash Payment Gateway** with automatic token management, payment processing, and refund capabilities. Built for production use with .NET 9.0.
+
+> **⚠️ Important:** This library is aligned with **bKash Tokenized Checkout API v1.2.0-beta**. All code examples include the mandatory `payerReference` field. See [Important API Updates](docs-final/IMPORTANT_API_UPDATES.md) for details.
+
+## 📑 Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Configuration](#configuration)
+- [API Reference](#api-reference)
+- [Webhook Verification](#webhook-verification)
+- [Payment Modes](#payment-modes)
+- [Error Handling](#error-handling)
+- [Documentation](#documentation)
+- [Links](#-links)
+- [Support](#-support)
 
 ## Features
 
-- ✅ Automatic token management with refresh (55-minute ID tokens, 28-day refresh tokens)
-- ✅ Payment creation and execution
-- ✅ Payment status queries
-- ✅ Refund processing with status tracking
-- ✅ Multi-environment support (sandbox/production)
-- ✅ Built-in error handling and logging
-- ✅ Strongly-typed request/response models
-- ✅ Dependency injection support
-- ✅ Health check integration
-- ✅ Webhook signature verification
+- ✅ **Automatic Token Management** - No need to manually handle token refresh (55-minute ID tokens, 28-day refresh tokens)
+- ✅ **Complete Payment Workflow** - Create, execute, and query payments with ease
+- ✅ **Refund Support** - Full and partial refund processing with status tracking
+- ✅ **Multi-Environment** - Seamless switching between sandbox and production
+- ✅ **Production-Ready** - Built-in error handling, logging, and retry logic
+- ✅ **Type-Safe** - Strongly-typed request/response models with IntelliSense support
+- ✅ **Modern .NET** - Built for .NET 9.0 with async/await patterns
+- ✅ **Dependency Injection** - Native DI support for ASP.NET Core
+- ✅ **Health Checks** - Integration with ASP.NET Core health monitoring
+- ✅ **Webhook Security** - Built-in signature verification for webhooks
+- ✅ **Well Documented** - Comprehensive documentation with code examples
+
+## Why Choose This Library?
+
+- 🎯 **Official API Compliance** - Aligned with bKash Tokenized Checkout API v1.2.0-beta
+- 🚀 **Zero Configuration Hassle** - Smart defaults with flexible configuration options
+- 🔒 **Security First** - HMAC-SHA256 webhook verification and secure credential handling
+- 📊 **Observable** - Built-in logging and health check support for monitoring
+- 🧪 **Tested** - Comprehensive examples and testing guides included
+- 📚 **Complete Documentation** - Step-by-step guides for every scenario
 
 ## Installation
 
@@ -241,10 +272,32 @@ services.AddBkashPayment(options =>
 - **[Guides](docs-final/guides/)** - Payment flow, error handling, security
 - **[Development](docs-final/development/)** - Contributing and project structure
 
-## License
+## 🔗 Links
 
-MIT
+- **NuGet Package**: [Bikiran.Payment.Bkash](https://www.nuget.org/packages/Bikiran.Payment.Bkash)
+- **GitHub Repository**: [bikirandev/Bikiran.Payment.Bkash](https://github.com/bikirandev/Bikiran.Payment.Bkash)
+- **Documentation**: [GitHub Pages](https://github.com/bikirandev/Bikiran.Payment.Bkash/tree/main/docs-final)
+- **Issue Tracker**: [GitHub Issues](https://github.com/bikirandev/Bikiran.Payment.Bkash/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/bikirandev/Bikiran.Payment.Bkash/discussions)
 
-## Support
+## 📝 License
 
-For issues and feature requests, please visit [GitHub Issues](https://github.com/bikiran/bkash-dotnet/issues).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read our [Contributing Guidelines](docs-final/development/contributing.md) before submitting pull requests.
+
+## 💬 Support
+
+- **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/bikirandev/Bikiran.Payment.Bkash/issues)
+- **Discussions**: Ask questions or share ideas on [GitHub Discussions](https://github.com/bikirandev/Bikiran.Payment.Bkash/discussions)
+- **bKash Support**: For bKash-specific questions, contact merchant.service@bka.sh
+
+## ⭐ Show Your Support
+
+If this library helps you, please give it a ⭐ on [GitHub](https://github.com/bikirandev/Bikiran.Payment.Bkash)!
+
+---
+
+**Made with ❤️ for the .NET community**

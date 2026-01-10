@@ -14,6 +14,7 @@ This is the first public release of Bikiran.Payment.Bkash - a comprehensive .NET
 ### Added
 
 #### Core Payment Features
+
 - Payment creation with bKash Tokenized Checkout API
 - Payment execution after customer authorization
 - Payment status query functionality
@@ -23,6 +24,7 @@ This is the first public release of Bikiran.Payment.Bkash - a comprehensive .NET
 - Support for bKash API v1.2.0-beta
 
 #### Production-Ready Features
+
 - Health check integration for monitoring bKash service connectivity
 - Webhook signature verification using HMAC-SHA256
 - Replay attack prevention with timestamp validation
@@ -32,6 +34,7 @@ This is the first public release of Bikiran.Payment.Bkash - a comprehensive .NET
 - Configurable token refresh buffer
 
 #### Developer Experience
+
 - Dependency injection support via `AddBkashPayment()` extension
 - Strongly-typed request/response models
 - Comprehensive XML documentation for IntelliSense
@@ -43,6 +46,7 @@ This is the first public release of Bikiran.Payment.Bkash - a comprehensive .NET
 - Extensive usage examples and documentation
 
 #### Security Features
+
 - `BkashWebhookHelper` utility for webhook verification
 - HMAC-SHA256 signature computation
 - Timestamp validation to prevent replay attacks
@@ -50,22 +54,26 @@ This is the first public release of Bikiran.Payment.Bkash - a comprehensive .NET
 - Thread-safe token management with `SemaphoreSlim`
 
 #### Configuration Options
+
 - Support for appsettings.json configuration
 - Support for environment variables
 - Configurable base URLs for custom endpoints
 - Configurable timeout and token refresh settings
 
 ### Changed
+
 - Token service registered as Singleton (instead of Scoped) for better caching
 - Updated to use .NET 9 modern null-checking patterns:
   - `ArgumentNullException.ThrowIfNull()`
   - `ArgumentException.ThrowIfNullOrWhiteSpace()`
 
 ### Fixed
+
 - Corrected duplicate service registration issue
 - Fixed copyright year from 2026 to 2025
 
 ### Dependencies
+
 - Microsoft.Extensions.DependencyInjection.Abstractions (9.0.0)
 - Microsoft.Extensions.Diagnostics.HealthChecks (9.0.0)
 - Microsoft.Extensions.Http (9.0.0)
@@ -74,6 +82,7 @@ This is the first public release of Bikiran.Payment.Bkash - a comprehensive .NET
 - Newtonsoft.Json (13.0.3)
 
 ### Documentation
+
 - Comprehensive README.md with quick start guide
 - USAGE_EXAMPLES.md with detailed code samples
 - IMPROVEMENTS.md documenting all enhancements
@@ -83,6 +92,7 @@ This is the first public release of Bikiran.Payment.Bkash - a comprehensive .NET
 - BUILD_SUCCESS.md with build and package information
 
 ### Known Limitations
+
 - No built-in retry policies (consider using Polly)
 - No rate limiting implementation
 - No Agreement API support (recurring payments)
@@ -95,6 +105,7 @@ This is the first public release of Bikiran.Payment.Bkash - a comprehensive .NET
 ## [Unreleased]
 
 ### Planned for v1.1.0
+
 - Comprehensive unit test suite
 - Integration test suite
 - HTTP retry policies with Polly
@@ -108,9 +119,9 @@ This is the first public release of Bikiran.Payment.Bkash - a comprehensive .NET
 
 ## Version History
 
-| Version | Release Date | Status | Notes |
-|---------|--------------|--------|-------|
-| 1.0.0 | 2025-01-08 | ? Released | Initial public release |
+| Version | Release Date | Status     | Notes                  |
+| ------- | ------------ | ---------- | ---------------------- |
+| 1.0.0   | 2025-01-08   | ? Released | Initial public release |
 
 ---
 
@@ -121,11 +132,13 @@ This is the first public release of Bikiran.Payment.Bkash - a comprehensive .NET
 If you're implementing bKash integration for the first time:
 
 1. **Install the package**:
+
    ```bash
    dotnet add package Bikiran.Payment.Bkash
    ```
 
 2. **Configure services**:
+
    ```csharp
    services.AddBkashPayment(options =>
    {
@@ -142,7 +155,7 @@ If you're implementing bKash integration for the first time:
    public class PaymentController : ControllerBase
    {
        private readonly IBkashPaymentService _bkashService;
-       
+
        public PaymentController(IBkashPaymentService bkashService)
        {
            _bkashService = bkashService;
@@ -157,6 +170,7 @@ See `USAGE_EXAMPLES.md` for complete implementation examples.
 ## Breaking Changes
 
 ### v1.0.0
+
 - None (initial release)
 
 ---
@@ -164,8 +178,9 @@ See `USAGE_EXAMPLES.md` for complete implementation examples.
 ## Support
 
 For issues, questions, or feature requests:
-- **GitHub Issues**: https://github.com/bikiran/bkash-dotnet/issues
-- **Documentation**: See README.md and USAGE_EXAMPLES.md in the repository
+
+- **GitHub Issues**: https://github.com/bikirandev/Bikiran.Payment.Bkash/issues
+- **Documentation**: See README.md and documentation in the repository
 
 ---
 
