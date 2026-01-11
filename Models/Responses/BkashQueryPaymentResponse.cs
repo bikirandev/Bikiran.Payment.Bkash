@@ -106,5 +106,5 @@ public class BkashQueryPaymentResponse
     /// <summary>
     /// Checks if payment was completed successfully
     /// </summary>
-    public bool IsPaymentCompletedSuccessfully => TransactionStatus.Equals("Completed", StringComparison.OrdinalIgnoreCase) && StatusCode == "0000";
+    public bool IsCompleted => TransactionStatus.Equals("Completed", StringComparison.OrdinalIgnoreCase) && StatusCode == "0000";
 }
