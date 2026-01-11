@@ -257,6 +257,9 @@ public async Task<IActionResult> GetRefundStatus(
         originalTransactionId = response.OriginalTrxId,
         originalAmount = response.OriginalTrxAmount,
         originalCompletedTime = response.OriginalTrxCompletedTime,
+        isFullRefunded = response.IsFullRefunded,
+        havingRefund = response.HavingRefund,
+        remainRefundAmount = response.RemainRefundAmount,
         refunds = response.RefundTransactions.Select(r => new
         {
             refundTrxId = r.RefundTrxId,

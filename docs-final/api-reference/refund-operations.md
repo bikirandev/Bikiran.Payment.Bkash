@@ -169,6 +169,11 @@ public class BkashRefundStatusResponse
     public string ExternalCode { get; set; }                          // External error code from bKash
     public string ErrorMessageEn { get; set; }                        // Error message in English
     public string ErrorMessageBn { get; set; }                        // Error message in Bengali
+
+    // Computed Properties
+    public bool IsFullRefunded { get; }                               // Whether transaction is fully refunded
+    public bool HavingRefund { get; }                                 // Whether there are any refund transactions
+    public double RemainRefundAmount { get; }                         // Remaining refundable amount
 }
 
 public class BkashRefundTransaction
@@ -191,6 +196,9 @@ var response = await _bkashService.QueryRefundStatusAsync(
 Console.WriteLine($"Original Amount: {response.OriginalTrxAmount}");
 Console.WriteLine($"Original Completed Time: {response.OriginalTrxCompletedTime}");
 Console.WriteLine($"Refunds: {response.RefundTransactions.Count}");
+Console.WriteLine($"Is Fully Refunded: {response.IsFullRefunded}");
+Console.WriteLine($"Has Refunds: {response.HavingRefund}");
+Console.WriteLine($"Remaining Refundable Amount: {response.RemainRefundAmount}");
 
 foreach (var refund in response.RefundTransactions)
 {

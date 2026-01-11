@@ -54,6 +54,21 @@ public class BkashRefundStatusResponse
     /// </summary>
     [JsonProperty("errorMessageBn")]
     public string ErrorMessageBn { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Indicates whether the transaction has been fully refunded
+    /// </summary>
+    public bool IsFullRefunded => RefundTransactions.Sum(r => r.RefundAmount) >= OriginalTrxAmount;
+
+    /// <summary>
+    /// Indicates whether there are any refund transactions
+    /// </summary>
+    public bool HavingRefund => RefundTransactions.Any();
+
+    /// <summary>
+    /// Remaining refundable amount from the original transaction
+    /// </summary>
+    public double RemainRefundAmount => OriginalTrxAmount - RefundTransactions.Sum(r => r.RefundAmount);
 }
 
 /// <summary>
