@@ -39,8 +39,8 @@ public class BkashRefundPaymentResponse
     public string OriginalTrxId { get; set; }            // Original transaction ID
     public string RefundTrxID { get; set; }              // Refund transaction ID
     public string RefundTransactionStatus { get; set; }  // Refund transaction status
-    public string OriginalTrxAmount { get; set; }        // Original transaction amount
-    public string RefundAmount { get; set; }             // Refund amount
+    public double OriginalTrxAmount { get; set; }        // Original transaction amount
+    public double RefundAmount { get; set; }             // Refund amount
     public string Currency { get; set; }                 // Currency code
     public string CompletedTime { get; set; }            // Completion timestamp
     public string SKU { get; set; }                      // SKU
@@ -162,7 +162,7 @@ Task<BkashRefundStatusResponse> QueryRefundStatusAsync(
 public class BkashRefundStatusResponse
 {
     public string OriginalTrxId { get; set; }                         // Original transaction ID
-    public string OriginalTrxAmount { get; set; }                     // Original transaction amount
+    public double OriginalTrxAmount { get; set; }                     // Original transaction amount
     public string OriginalTrxCompletedTime { get; set; }              // Original transaction completion time
     public List<BkashRefundTransaction> RefundTransactions { get; set; } // List of refund transactions
     public string InternalCode { get; set; }                          // Internal error code
@@ -175,7 +175,7 @@ public class BkashRefundTransaction
 {
     public string RefundTrxId { get; set; }              // Refund transaction ID
     public string RefundTransactionStatus { get; set; }  // Refund transaction status
-    public string RefundAmount { get; set; }             // Refund amount
+    public double RefundAmount { get; set; }             // Refund amount
     public string CompletedTime { get; set; }            // Completion timestamp
 }
 ```

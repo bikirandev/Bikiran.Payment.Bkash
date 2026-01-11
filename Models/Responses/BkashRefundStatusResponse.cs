@@ -17,7 +17,7 @@ public class BkashRefundStatusResponse
     /// Original transaction amount
     /// </summary>
     [JsonProperty("originalTrxAmount")]
-    public string OriginalTrxAmount { get; set; } = string.Empty;
+    public double OriginalTrxAmount { get; set; }
 
     /// <summary>
     /// Original transaction completion time
@@ -77,7 +77,7 @@ public class BkashRefundTransaction
     /// Refund amount
     /// </summary>
     [JsonProperty("refundAmount")]
-    public string RefundAmount { get; set; } = string.Empty;
+    public double RefundAmount { get; set; }
 
     /// <summary>
     /// Completion timestamp

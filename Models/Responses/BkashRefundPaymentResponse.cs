@@ -29,13 +29,13 @@ public class BkashRefundPaymentResponse
     /// Original transaction amount
     /// </summary>
     [JsonProperty("originalTrxAmount")]
-    public string OriginalTrxAmount { get; set; } = string.Empty;
+    public double OriginalTrxAmount { get; set; }
 
     /// <summary>
     /// Refund amount
     /// </summary>
     [JsonProperty("refundAmount")]
-    public string RefundAmount { get; set; } = string.Empty;
+    public double RefundAmount { get; set; }
 
     /// <summary>
     /// Currency code

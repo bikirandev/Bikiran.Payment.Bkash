@@ -23,7 +23,7 @@ public class BkashRefundPaymentRequest
     /// Refund amount
     /// </summary>
     [JsonProperty("refundAmount")]
-    public string RefundAmount { get; set; } = string.Empty;
+    public double RefundAmount { get; set; }
 
     /// <summary>
     /// SKU (max 255 characters) - Product/service related information
@@ -48,8 +48,8 @@ public class BkashRefundPaymentRequest
         if (string.IsNullOrWhiteSpace(TrxId))
             throw new ArgumentException("TrxId is required", nameof(TrxId));
 
-        if (string.IsNullOrWhiteSpace(RefundAmount))
-            throw new ArgumentException("RefundAmount is required", nameof(RefundAmount));
+        if (RefundAmount <= 0)
+            throw new ArgumentException("valid RefundAmount is required", nameof(RefundAmount));
 
         if (SKU?.Length > 255)
             throw new ArgumentException("SKU cannot exceed 255 characters", nameof(SKU));
