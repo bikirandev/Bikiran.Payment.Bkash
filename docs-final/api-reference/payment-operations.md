@@ -128,7 +128,7 @@ public class BkashCreatePaymentResponse : BkashBaseResponse
 ```csharp
 var request = new BkashCreatePaymentRequest
 {
-    Amount = 1000.50m,
+    Amount = 1000.50,
     MerchantInvoiceNumber = $"INV-{DateTime.UtcNow.Ticks}",
     PayerReference = "01712345678",  // Customer phone number
     Intent = "sale",

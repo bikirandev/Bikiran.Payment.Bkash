@@ -55,7 +55,7 @@ var request = new BkashRefundPaymentRequest
 {
     PaymentId = "TR00111A2B3C4",
     TrxId = "8AS7D6F89G",
-    RefundAmount = 500.00m,
+    RefundAmount = 500.00,
     Sku = "PRODUCT-123",
     Reason = "Customer requested refund"
 };

@@ -36,7 +36,7 @@ public class BkashCreatePaymentRequest
 ```csharp
 var request = new BkashCreatePaymentRequest
 {
-    Amount = 1000.00m,
+    Amount = 1000.00,
     MerchantInvoiceNumber = "INV-123456",
     PayerReference = "01712345678",  // Customer phone number
     Intent = "sale"
@@ -143,7 +143,7 @@ All documentation has been updated with these corrections:
 ```csharp
 var request = new BkashCreatePaymentRequest
 {
-    Amount = 1000.00m,
+    Amount = 1000.00,
     MerchantInvoiceNumber = "INV-123456",
     Intent = "sale"
     // Missing: PayerReference
@@ -156,7 +156,7 @@ var request = new BkashCreatePaymentRequest
 ```csharp
 var request = new BkashCreatePaymentRequest
 {
-    Amount = 1000.00m,
+    Amount = 1000.00,
     MerchantInvoiceNumber = "INV-123456",
     PayerReference = "01712345678",  // ✅ Required field
     Intent = "sale"
