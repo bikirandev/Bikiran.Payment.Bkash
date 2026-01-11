@@ -31,6 +31,7 @@ A comprehensive .NET library for integrating **bKash Payment Gateway** with auto
 - ✅ **Multi-Environment** - Seamless switching between sandbox and production
 - ✅ **Production-Ready** - Built-in error handling, logging, and retry logic
 - ✅ **Type-Safe** - Strongly-typed request/response models with IntelliSense support
+- ✅ **Standardized Responses** - Generic endpoint wrapper for consistent API responses
 - ✅ **Modern .NET** - Built for .NET 9.0 with async/await patterns
 - ✅ **Dependency Injection** - Native DI support for ASP.NET Core
 - ✅ **Health Checks** - Integration with ASP.NET Core health monitoring
@@ -168,6 +169,7 @@ BKASH__ENVIRONMENT=Sandbox
 - [Token Management](docs-final/api-reference/token-management.md)
 - [Webhook Handling](docs-final/api-reference/webhook-handling.md)
 - [Health Checks](docs-final/api-reference/health-checks.md)
+- [Endpoint Wrapper](docs-final/api-reference/endpoint-wrapper.md)
 
 ## Webhook Verification
 

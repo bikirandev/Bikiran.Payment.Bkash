@@ -16,6 +16,8 @@ Bikiran.Payment.Bkash/
 ├── HealthChecks/
 │   └── BkashHealthCheck.cs          # ASP.NET Core health check
 ├── Models/
+│   ├── Endpoints/                   # Endpoint wrapper models
+│   │   └── BkashEndpoint.cs         # Generic response wrapper
 │   ├── Requests/                    # Request models
 │   │   ├── BkashCreatePaymentRequest.cs
 │   │   ├── BkashExecutePaymentRequest.cs
@@ -31,8 +33,9 @@ Bikiran.Payment.Bkash/
 │   │   ├── BkashRefundStatusResponse.cs
 │   │   ├── BkashGrantTokenResponse.cs
 │   │   └── BkashRefreshTokenResponse.cs
-│   └── Webhooks/
-│       └── BkashWebhookNotification.cs
+│   ├── Webhooks/
+│   │   └── BkashWebhookNotification.cs
+│   └── BkashTransactionMode.cs      # Transaction mode enum
 ├── Services/
 │   ├── IBkashPaymentService.cs      # Payment service interface
 │   ├── BkashPaymentService.cs       # Payment service implementation
@@ -47,24 +50,31 @@ Bikiran.Payment.Bkash/
 ## Key Components
 
 ### Configuration
+
 - **BkashOptions**: Configuration model with validation
 
 ### Services
+
 - **BkashPaymentService**: Handles payment operations
 - **BkashTokenService**: Manages authentication tokens (Singleton)
 
 ### Models
+
+- **Endpoint Models**: Generic response wrapper for standardized API responses
 - **Request Models**: Strongly-typed API request models
 - **Response Models**: Strongly-typed API response models
 - **Webhook Models**: Webhook notification models
 
 ### Exceptions
+
 - Custom exception hierarchy for error handling
 
 ### Health Checks
+
 - Integration with ASP.NET Core health checks
 
 ### Utilities
+
 - Helper classes for common operations
 
 ## Dependencies

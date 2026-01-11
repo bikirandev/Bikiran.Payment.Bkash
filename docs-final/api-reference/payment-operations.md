@@ -23,6 +23,56 @@ public interface IBkashPaymentService
 }
 ```
 
+## BkashEndpoint<T> Wrapper
+
+For standardized API responses in your application, you can use the `BkashEndpoint<T>` generic wrapper class:
+
+```csharp
+public class BkashEndpoint<T>
+{
+    public string Status { get; set; }      // "success" or "error"
+    public T? Data { get; set; }            // The actual response data
+    public string Message { get; set; }     // Descriptive message
+}
+```
+
+### Example Usage
+
+```csharp
+[HttpPost("create")]
+public async Task<IActionResult> CreatePayment([FromBody] PaymentDto dto)
+{
+    try
+    {
+        var request = new BkashCreatePaymentRequest
+        {
+            Amount = dto.Amount,
+            MerchantInvoiceNumber = dto.InvoiceNumber,
+            PayerReference = dto.CustomerPhone,
+            Intent = "sale"
+        };
+
+        var response = await _bkashService.CreatePaymentAsync(request);
+
+        return Ok(new BkashEndpoint<BkashCreatePaymentResponse>
+        {
+            Status = "success",
+            Data = response,
+            Message = "Payment created successfully. Redirect to bKashURL."
+        });
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(new BkashEndpoint<BkashCreatePaymentResponse>
+        {
+            Status = "error",
+            Data = null,
+            Message = ex.Message
+        });
+    }
+}
+```
+
 ## CreatePaymentAsync
 
 Creates a new payment request and returns a bKash payment URL for the customer.

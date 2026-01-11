@@ -41,12 +41,14 @@ public class BkashRefundPaymentResponse : BkashBaseResponse
     public string TransactionStatus { get; set; } // Refund status
     public double RefundAmount { get; set; }    // Refunded amount
     public DateTime CompletionTime { get; set; } // Refund completion time
-    
+
     public bool IsCompleted => TransactionStatus == "Completed";
 }
 ```
 
 ### Example Usage
+
+#### Basic Example
 
 ```csharp
 var request = new BkashRefundPaymentRequest
@@ -64,6 +66,57 @@ if (response.IsCompleted)
 {
     Console.WriteLine($"Refund successful: {response.RefundTrxID}");
 }
+```
+
+#### Using BkashEndpoint Wrapper
+
+```csharp
+using Bikiran.Payment.Bkash.Models.Endpoints;
+
+[HttpPost("refund")]
+public async Task<ActionResult<BkashEndpoint<BkashRefundPaymentResponse>>> ProcessRefund(
+    [FromBody] RefundRequest request)
+{
+    try
+    {
+        var bkashRequest = new BkashRefundPaymentRequest
+        {
+            PaymentId = request.PaymentId,
+            TrxId = request.TransactionId,
+            RefundAmount = request.Amount,
+            Sku = request.OrderId,
+            Reason = request.Reason
+        };
+
+        var response = await _bkashService.RefundPaymentAsync(bkashRequest);
+
+        return Ok(new BkashEndpoint<BkashRefundPaymentResponse>
+        {
+            Status = response.IsCompleted ? "success" : "error",
+            Data = response,
+            Message = response.IsCompleted
+                ? $"Refund processed successfully. Transaction ID: {response.RefundTrxID}"
+                : "Refund processing failed"
+        });
+    }
+    catch (BkashException ex)
+    {
+        return BadRequest(new BkashEndpoint<BkashRefundPaymentResponse>
+        {
+            Status = "error",
+            Data = null,
+            Message = $"Refund failed: {ex.Message}"
+        });
+    }
+}
+
+public record RefundRequest(
+    string PaymentId,
+    string TransactionId,
+    double Amount,
+    string OrderId,
+    string Reason
+);
 ```
 
 ### Refund Types
@@ -141,12 +194,12 @@ foreach (var refund in response.RefundTransactions)
 
 ## Common Errors
 
-| Status Code | Description |
-|-------------|-------------|
-| `2023` | Insufficient balance for refund |
-| `2053` | Invalid payment for refund |
-| `2054` | Refund amount exceeds payment |
-| `2055` | Payment already fully refunded |
+| Status Code | Description                     |
+| ----------- | ------------------------------- |
+| `2023`      | Insufficient balance for refund |
+| `2053`      | Invalid payment for refund      |
+| `2054`      | Refund amount exceeds payment   |
+| `2055`      | Payment already fully refunded  |
 
 ## Next Steps
 

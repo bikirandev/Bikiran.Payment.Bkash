@@ -37,6 +37,7 @@ Detailed API documentation:
 - [Token Management](api-reference/token-management.md) - Automatic token handling
 - [Webhook Handling](api-reference/webhook-handling.md) - Secure webhook verification
 - [Health Checks](api-reference/health-checks.md) - Monitor service health
+- [Endpoint Wrapper](api-reference/endpoint-wrapper.md) - Standardized API response wrapper
 
 ### 📘 Guides
 

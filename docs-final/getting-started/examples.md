@@ -49,6 +49,8 @@ app.Run();
 
 ## Creating a Payment
 
+### Basic Example
+
 ```csharp
 using Bikiran.Payment.Bkash.Services;
 using Bikiran.Payment.Bkash.Models.Requests;
@@ -88,6 +90,51 @@ public class PaymentController : ControllerBase
         });
     }
 }
+```
+
+### Using BkashEndpoint Wrapper
+
+For standardized API responses:
+
+```csharp
+using Bikiran.Payment.Bkash.Models.Endpoints;
+
+[HttpPost("create-v2")]
+public async Task<ActionResult<BkashEndpoint<BkashCreatePaymentResponse>>> CreatePaymentV2(
+    [FromBody] PaymentRequest request)
+{
+    try
+    {
+        var bkashRequest = new BkashCreatePaymentRequest
+        {
+            Amount = request.Amount,
+            MerchantInvoiceNumber = request.InvoiceNumber,
+            PayerReference = request.CustomerPhone,
+            Intent = "sale",
+            Currency = "BDT"
+        };
+
+        var response = await _bkashService.CreatePaymentAsync(bkashRequest);
+
+        return Ok(new BkashEndpoint<BkashCreatePaymentResponse>
+        {
+            Status = "success",
+            Data = response,
+            Message = "Payment created successfully. Redirect customer to Data.BkashURL"
+        });
+    }
+    catch (BkashException ex)
+    {
+        return BadRequest(new BkashEndpoint<BkashCreatePaymentResponse>
+        {
+            Status = "error",
+            Data = null,
+            Message = $"Payment creation failed: {ex.Message}"
+        });
+    }
+}
+
+public record PaymentRequest(double Amount, string InvoiceNumber, string CustomerPhone);
 ```
 
 ## Executing a Payment
