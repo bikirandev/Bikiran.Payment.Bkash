@@ -5,15 +5,15 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>1.0.2</Version>
+		<Version>1.0.3</Version>
 		<Authors>Bikiran</Authors>
 		<Company>Bikiran</Company>
 		<Product>Bikiran bKash Payment Gateway</Product>
 		<Description>A comprehensive .NET library for integrating bKash payment gateway with automatic token management, payment processing, and refund capabilities. Supports Tokenized Checkout API v1.2.0-beta.</Description>
 		<PackageTags>bKash;Payment;Gateway;Bangladesh;Mobile Financial Service;MFS;Payment Processing;Tokenized Checkout</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/bikiran/bkash-dotnet</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/bikiran/bkash-dotnet</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/bikirandev/Bikiran.Payment.Bkash</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/bikirandev/Bikiran.Payment.Bkash</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Copyright>Copyright © 2025 Bikiran</Copyright>
