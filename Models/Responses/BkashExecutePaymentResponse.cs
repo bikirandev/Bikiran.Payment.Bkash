@@ -65,7 +65,7 @@ public class BkashExecutePaymentResponse
     /// Payment amount
     /// </summary>
     [JsonProperty("amount")]
-    public string Amount { get; set; } = string.Empty;
+    public double Amount { get; set; }
 
     /// <summary>
     /// Currency code
