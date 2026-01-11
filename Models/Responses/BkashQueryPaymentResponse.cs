@@ -53,7 +53,7 @@ public class BkashQueryPaymentResponse
     /// Payment amount
     /// </summary>
     [JsonProperty("amount")]
-    public string Amount { get; set; } = string.Empty;
+    public double Amount { get; set; }
 
     /// <summary>
     /// Currency code
@@ -102,4 +102,9 @@ public class BkashQueryPaymentResponse
     /// </summary>
     [JsonProperty("errorMessage")]
     public string ErrorMessage { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Checks if payment was completed successfully
+    /// </summary>
+    public bool IsPaymentCompletedSuccessfully => TransactionStatus.Equals("Completed", StringComparison.OrdinalIgnoreCase) && StatusCode == "0000";
 }
