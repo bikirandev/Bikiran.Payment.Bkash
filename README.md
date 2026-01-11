@@ -7,7 +7,7 @@
 
 A comprehensive .NET library for integrating **bKash Payment Gateway** with automatic token management, payment processing, and refund capabilities. Built for production use with .NET 9.0.
 
-> **⚠️ Important:** This library is aligned with **bKash Tokenized Checkout API v1.2.0-beta**. All code examples include the mandatory `payerReference` field. See [Important API Updates](docs-final/IMPORTANT_API_UPDATES.md) for details.
+> **⚠️ Important:** This library is aligned with **bKash Tokenized Checkout API v1.2.0-beta**. All code examples include the mandatory `payerReference` field. See [Important API Updates](docs/IMPORTANT_API_UPDATES.md) for details.
 
 ## 📑 Table of Contents
 
@@ -141,8 +141,8 @@ BKASH__ENVIRONMENT=Sandbox
 
 📚 **For detailed configuration guides:**
 
-- [Configuration Guide](docs-final/configuration/configuration-guide.md) - All configuration methods and options
-- [Environment Setup](docs-final/configuration/environment-setup.md) - Platform-specific deployment setup
+- [Configuration Guide](docs/configuration/configuration-guide.md) - All configuration methods and options
+- [Environment Setup](docs/configuration/environment-setup.md) - Platform-specific deployment setup
 
 ⚠️ **Security Note**: Never commit credentials to source control!
 
@@ -164,12 +164,12 @@ BKASH__ENVIRONMENT=Sandbox
 
 📚 **For complete API documentation, see:**
 
-- [Payment Operations](docs-final/api-reference/payment-operations.md)
-- [Refund Operations](docs-final/api-reference/refund-operations.md)
-- [Token Management](docs-final/api-reference/token-management.md)
-- [Webhook Handling](docs-final/api-reference/webhook-handling.md)
-- [Health Checks](docs-final/api-reference/health-checks.md)
-- [Endpoint Wrapper](docs-final/api-reference/endpoint-wrapper.md)
+- [Payment Operations](docs/api-reference/payment-operations.md)
+- [Refund Operations](docs/api-reference/refund-operations.md)
+- [Token Management](docs/api-reference/token-management.md)
+- [Webhook Handling](docs/api-reference/webhook-handling.md)
+- [Health Checks](docs/api-reference/health-checks.md)
+- [Endpoint Wrapper](docs/api-reference/endpoint-wrapper.md)
 
 ## Webhook Verification
 
@@ -231,7 +231,7 @@ catch (BkashException ex)
 
 📚 **For comprehensive error handling guide:**
 
-- [Error Handling Guide](docs-final/guides/error-handling.md)
+- [Error Handling Guide](docs/guides/error-handling.md)
 
 ## Advanced Configuration
 
@@ -265,20 +265,20 @@ services.AddBkashPayment(options =>
 
 ## Documentation
 
-📚 **Complete documentation is available in the [docs-final](docs-final/) folder:**
+📚 **Complete documentation is available in the [docs](docs/) folder:**
 
-- **[Quick Start Guide](docs-final/getting-started/quick-start.md)** - Get started in 5 minutes
-- **[Code Examples](docs-final/getting-started/examples.md)** - Comprehensive examples
-- **[Configuration Guide](docs-final/configuration/configuration-guide.md)** - All configuration options
-- **[API Reference](docs-final/api-reference/)** - Complete API documentation
-- **[Guides](docs-final/guides/)** - Payment flow, error handling, security
-- **[Development](docs-final/development/)** - Contributing and project structure
+- **[Quick Start Guide](docs/getting-started/quick-start.md)** - Get started in 5 minutes
+- **[Code Examples](docs/getting-started/examples.md)** - Comprehensive examples
+- **[Configuration Guide](docs/configuration/configuration-guide.md)** - All configuration options
+- **[API Reference](docs/api-reference/)** - Complete API documentation
+- **[Guides](docs/guides/)** - Payment flow, error handling, security
+- **[Development](docs/development/)** - Contributing and project structure
 
 ## 🔗 Links
 
 - **NuGet Package**: [Bikiran.Payment.Bkash](https://www.nuget.org/packages/Bikiran.Payment.Bkash)
 - **GitHub Repository**: [bikirandev/Bikiran.Payment.Bkash](https://github.com/bikirandev/Bikiran.Payment.Bkash)
-- **Documentation**: [GitHub Pages](https://github.com/bikirandev/Bikiran.Payment.Bkash/tree/main/docs-final)
+- **Documentation**: [GitHub Pages](https://github.com/bikirandev/Bikiran.Payment.Bkash/tree/main/docs)
 - **Issue Tracker**: [GitHub Issues](https://github.com/bikirandev/Bikiran.Payment.Bkash/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/bikirandev/Bikiran.Payment.Bkash/discussions)
 
@@ -288,7 +288,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read our [Contributing Guidelines](docs-final/development/contributing.md) before submitting pull requests.
+Contributions are welcome! Please read our [Contributing Guidelines](docs/development/contributing.md) before submitting pull requests.
 
 ## 💬 Support
 
