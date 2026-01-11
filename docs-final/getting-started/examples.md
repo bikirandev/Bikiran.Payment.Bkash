@@ -256,11 +256,13 @@ public async Task<IActionResult> GetRefundStatus(
     {
         originalTransactionId = response.OriginalTrxId,
         originalAmount = response.OriginalTrxAmount,
+        originalCompletedTime = response.OriginalTrxCompletedTime,
         refunds = response.RefundTransactions.Select(r => new
         {
             refundTrxId = r.RefundTrxId,
-            amount = r.Amount,
-            completionTime = r.CompletionTime
+            status = r.RefundTransactionStatus,
+            amount = r.RefundAmount,
+            completionTime = r.CompletedTime
         })
     });
 }

@@ -5,6 +5,7 @@ Automatic token management with intelligent refresh capabilities.
 ## Overview
 
 Bikiran.Payment.Bkash automatically handles bKash API token management including:
+
 - Token generation (grant)
 - Token refresh
 - Automatic expiry detection
@@ -59,11 +60,13 @@ var response = await _bkashService.CreatePaymentAsync(request);
 ## Token Types
 
 ### ID Token
+
 - **Validity**: 55 minutes
 - **Usage**: API authentication
 - **Auto-refresh**: 5 minutes before expiry (configurable)
 
 ### Refresh Token
+
 - **Validity**: 28 days
 - **Usage**: Obtaining new ID token
 - **Behavior**: Automatically used when ID token expires
@@ -80,7 +83,7 @@ builder.Services.AddBkashPayment(options =>
     options.Username = "your-username";
     options.Password = "your-password";
     options.Environment = BkashEnvironment.Sandbox;
-    
+
     // Refresh token 10 minutes before expiry (default: 300 seconds = 5 minutes)
     options.TokenRefreshBufferSeconds = 600;
 });
@@ -106,6 +109,7 @@ var response = await _tokenService.GrantTokenAsync();
 Console.WriteLine($"ID Token: {response.IdToken}");
 Console.WriteLine($"Refresh Token: {response.RefreshToken}");
 Console.WriteLine($"Expires In: {response.ExpiresIn} seconds");
+Console.WriteLine($"Token Type: {response.TokenType}");
 ```
 
 ### RefreshTokenAsync
@@ -116,6 +120,7 @@ Manually refresh a token (handled automatically).
 var response = await _tokenService.RefreshTokenAsync(refreshToken);
 Console.WriteLine($"New ID Token: {response.IdToken}");
 Console.WriteLine($"New Refresh Token: {response.RefreshToken}");
+Console.WriteLine($"Expires In: {response.ExpiresIn} seconds");
 ```
 
 ## Thread Safety

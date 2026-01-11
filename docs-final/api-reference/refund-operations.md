@@ -34,15 +34,23 @@ public class BkashRefundPaymentRequest
 ### Response Model
 
 ```csharp
-public class BkashRefundPaymentResponse : BkashBaseResponse
+public class BkashRefundPaymentResponse
 {
-    public string RefundTrxID { get; set; }      // Refund transaction ID
-    public string OriginalTrxID { get; set; }    // Original transaction ID
-    public string TransactionStatus { get; set; } // Refund status
-    public double RefundAmount { get; set; }    // Refunded amount
-    public DateTime CompletionTime { get; set; } // Refund completion time
+    public string OriginalTrxId { get; set; }            // Original transaction ID
+    public string RefundTrxID { get; set; }              // Refund transaction ID
+    public string RefundTransactionStatus { get; set; }  // Refund transaction status
+    public string OriginalTrxAmount { get; set; }        // Original transaction amount
+    public string RefundAmount { get; set; }             // Refund amount
+    public string Currency { get; set; }                 // Currency code
+    public string CompletedTime { get; set; }            // Completion timestamp
+    public string SKU { get; set; }                      // SKU
+    public string Reason { get; set; }                   // Refund reason
+    public string InternalCode { get; set; }             // Internal error code
+    public string ExternalCode { get; set; }             // External error code from bKash
+    public string ErrorMessageEn { get; set; }           // Error message in English
+    public string ErrorMessageBn { get; set; }           // Error message in Bengali
 
-    public bool IsCompleted => TransactionStatus == "Completed";
+    public bool IsCompleted => RefundTransactionStatus == "Completed";
 }
 ```
 
@@ -151,19 +159,24 @@ Task<BkashRefundStatusResponse> QueryRefundStatusAsync(
 ### Response Model
 
 ```csharp
-public class BkashRefundStatusResponse : BkashBaseResponse
+public class BkashRefundStatusResponse
 {
-    public string OriginalTrxId { get; set; }
-    public double OriginalTrxAmount { get; set; }
-    public List<RefundTransaction> RefundTransactions { get; set; }
+    public string OriginalTrxId { get; set; }                         // Original transaction ID
+    public string OriginalTrxAmount { get; set; }                     // Original transaction amount
+    public string OriginalTrxCompletedTime { get; set; }              // Original transaction completion time
+    public List<BkashRefundTransaction> RefundTransactions { get; set; } // List of refund transactions
+    public string InternalCode { get; set; }                          // Internal error code
+    public string ExternalCode { get; set; }                          // External error code from bKash
+    public string ErrorMessageEn { get; set; }                        // Error message in English
+    public string ErrorMessageBn { get; set; }                        // Error message in Bengali
 }
 
-public class RefundTransaction
+public class BkashRefundTransaction
 {
-    public string RefundTrxId { get; set; }
-    public double Amount { get; set; }
-    public string TransactionStatus { get; set; }
-    public DateTime CompletionTime { get; set; }
+    public string RefundTrxId { get; set; }              // Refund transaction ID
+    public string RefundTransactionStatus { get; set; }  // Refund transaction status
+    public string RefundAmount { get; set; }             // Refund amount
+    public string CompletedTime { get; set; }            // Completion timestamp
 }
 ```
 
@@ -176,11 +189,13 @@ var response = await _bkashService.QueryRefundStatusAsync(
 );
 
 Console.WriteLine($"Original Amount: {response.OriginalTrxAmount}");
+Console.WriteLine($"Original Completed Time: {response.OriginalTrxCompletedTime}");
 Console.WriteLine($"Refunds: {response.RefundTransactions.Count}");
 
 foreach (var refund in response.RefundTransactions)
 {
-    Console.WriteLine($"  {refund.RefundTrxId}: {refund.Amount} - {refund.TransactionStatus}");
+    Console.WriteLine($"  {refund.RefundTrxId}: {refund.RefundAmount} - {refund.RefundTransactionStatus}");
+    Console.WriteLine($"    Completed: {refund.CompletedTime}");
 }
 ```
 

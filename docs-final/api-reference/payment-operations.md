@@ -103,23 +103,27 @@ public class BkashCreatePaymentRequest
 ### Response Model
 
 ```csharp
-public class BkashCreatePaymentResponse : BkashBaseResponse
+public class BkashCreatePaymentResponse
 {
     public string PaymentID { get; set; }                // Payment identifier
+    public string AgreementID { get; set; }              // Agreement ID (for subscription payments)
+    public string PaymentCreateTime { get; set; }        // Payment creation timestamp
+    public string TransactionStatus { get; set; }        // Current transaction status
+    public double Amount { get; set; }                  // Payment amount
+    public string Currency { get; set; }                 // Currency code
+    public string Intent { get; set; }                   // Payment intent
+    public string MerchantInvoiceNumber { get; set; }    // Your invoice number
     public string BkashURL { get; set; }                 // URL to redirect customer
     public string CallbackURL { get; set; }              // Your callback URL
     public string SuccessCallbackURL { get; set; }       // Success redirect URL
     public string FailureCallbackURL { get; set; }       // Failure redirect URL
     public string CancelledCallbackURL { get; set; }     // Cancel redirect URL
-    public double Amount { get; set; }                  // Payment amount
-    public string Intent { get; set; }                   // Payment intent
-    public string Currency { get; set; }                 // Currency code
-    public string MerchantInvoiceNumber { get; set; }    // Your invoice number
+    public string StatusCode { get; set; }               // Status code (0000 = success)
+    public string StatusMessage { get; set; }            // Status message
+    public string ErrorCode { get; set; }                // Error code (if any)
+    public string ErrorMessage { get; set; }             // Error message (if any)
 
-    // Inherited from BkashBaseResponse
-    public string StatusCode { get; set; }
-    public string StatusMessage { get; set; }
-    public bool IsSuccess => StatusCode == "0000";
+    public bool IsSuccess => StatusCode == "0000" && !string.IsNullOrEmpty(PaymentID);
 }
 ```
 
@@ -190,21 +194,26 @@ Task<BkashExecutePaymentResponse> ExecutePaymentAsync(
 ### Response Model
 
 ```csharp
-public class BkashExecutePaymentResponse : BkashBaseResponse
+public class BkashExecutePaymentResponse
 {
     public string PaymentID { get; set; }                // Payment identifier
+    public string AgreementID { get; set; }              // Agreement ID (for subscription payments)
+    public string CustomerMsisdn { get; set; }           // Customer phone number
+    public string PayerReference { get; set; }           // Customer reference from request
+    public string AgreementExecuteTime { get; set; }     // Agreement execution time
+    public string AgreementStatus { get; set; }          // Agreement status
+    public string PaymentExecuteTime { get; set; }       // Execution timestamp
     public string TrxID { get; set; }                    // bKash transaction ID
     public string TransactionStatus { get; set; }        // "Completed", "Cancelled", etc.
     public double Amount { get; set; }                  // Transaction amount
     public string Currency { get; set; }                 // Currency code
     public string Intent { get; set; }                   // Payment intent
     public string MerchantInvoiceNumber { get; set; }    // Your invoice number
-    public string PayerReference { get; set; }           // Customer reference from request
-    public DateTime PaymentExecuteTime { get; set; }     // Execution timestamp
-    public string CustomerMsisdn { get; set; }           // Customer phone number
+    public string StatusCode { get; set; }               // Status code (0000 = success)
+    public string StatusMessage { get; set; }            // Status message
+    public string ErrorCode { get; set; }                // Error code (if any)
 
-    public bool IsCompleted => TransactionStatus == "Completed";
-    public bool IsCancelled => TransactionStatus == "Cancelled";
+    public bool IsCompleted => TransactionStatus == "Completed" && !string.IsNullOrEmpty(TrxID);
 }
 ```
 
@@ -274,20 +283,26 @@ Task<BkashQueryPaymentResponse> QueryPaymentAsync(
 ### Response Model
 
 ```csharp
-public class BkashQueryPaymentResponse : BkashBaseResponse
+public class BkashQueryPaymentResponse
 {
     public string PaymentID { get; set; }                // Payment identifier
+    public string Mode { get; set; }                     // Transaction mode
+    public string PayerReference { get; set; }           // Customer reference from request
+    public string PaymentCreateTime { get; set; }        // Payment creation timestamp
+    public string PaymentExecuteTime { get; set; }       // Payment execution timestamp
     public string TrxID { get; set; }                    // Transaction ID (if executed)
     public string TransactionStatus { get; set; }        // Current status
     public double Amount { get; set; }                  // Payment amount
     public string Currency { get; set; }                 // Currency code
     public string Intent { get; set; }                   // Payment intent
     public string MerchantInvoiceNumber { get; set; }    // Your invoice number
-    public string PayerReference { get; set; }           // Customer reference from request
-    public DateTime CreateTime { get; set; }             // Creation timestamp
-    public DateTime UpdateTime { get; set; }             // Last update timestamp
-    public DateTime? PaymentExecuteTime { get; set; }    // Execution time (if completed)
-    public string CustomerMsisdn { get; set; }           // Customer phone (if available)
+    public string UserVerificationStatus { get; set; }   // User verification status
+    public string StatusCode { get; set; }               // Status code (0000 = success)
+    public string StatusMessage { get; set; }            // Status message
+    public string ErrorCode { get; set; }                // Error code (if any)
+    public string ErrorMessage { get; set; }             // Error message (if any)
+
+    public bool IsCompleted => TransactionStatus.Equals("Completed", StringComparison.OrdinalIgnoreCase) && StatusCode == "0000";
 }
 ```
 

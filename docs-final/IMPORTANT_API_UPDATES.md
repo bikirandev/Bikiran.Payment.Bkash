@@ -67,19 +67,28 @@ var request = new BkashCreatePaymentRequest
 The `payerReference` field is also returned in response models for verification:
 
 ```csharp
-public class BkashExecutePaymentResponse : BkashBaseResponse
+public class BkashExecutePaymentResponse
 {
     public string PaymentID { get; set; }
     public string TrxID { get; set; }
     public string PayerReference { get; set; }  // ✅ ADDED
+    public string CustomerMsisdn { get; set; }
+    public string TransactionStatus { get; set; }
+    public double Amount { get; set; }
+    public string StatusCode { get; set; }
+    public string StatusMessage { get; set; }
     // ... other fields
 }
 
-public class BkashQueryPaymentResponse : BkashBaseResponse
+public class BkashQueryPaymentResponse
 {
     public string PaymentID { get; set; }
     public string TrxID { get; set; }
     public string PayerReference { get; set; }  // ✅ ADDED
+    public string TransactionStatus { get; set; }
+    public double Amount { get; set; }
+    public string StatusCode { get; set; }
+    public string StatusMessage { get; set; }
     // ... other fields
 }
 ```
